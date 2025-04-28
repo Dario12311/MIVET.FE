@@ -1,0 +1,247 @@
+/* Estructura principal */
+.navbar {
+    display: flex;
+    height: 50px;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 50px;
+    background-color: transparent;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    transition: all 0.3s ease;
+}
+
+.navbar.scrolled {
+    background-color: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.navbar:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Ajustando los colores de los elementos para mejor visibilidad */
+.nav-btn {
+    color: #8B4513;
+    font-weight: 600;
+}
+
+.nav-btn:hover {
+    background-color: rgba(229, 121, 59, 0.1);
+}
+
+.btn-outline {
+    background-color: transparent;
+    border: 2px solid #8B4513;
+    color: #8B4513;
+    box-shadow: none;
+}
+
+.btn-outline:hover {
+    background-color: #8B4513;
+    color: #fff;
+}
+
+.btn-filled {
+    background: #8B4513;
+    box-shadow: none;
+}
+
+.btn-filled:hover {
+    background: #654321;
+}
+  
+  .navbar-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+  }
+  
+  .navbar-logo img {
+      height: 60px;
+      border-radius: 10px;
+  }
+  
+  .Logo-Texto {
+      color: #e5793b;
+      font-size: 24px;
+      font-weight: bold;
+      text-decoration: none;
+  }
+  
+  .navbar-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+  }
+  
+  .navbar-links li {
+    display: flex;
+    align-items: center;
+  }
+  
+  /* Botones de navegación */
+  .nav-btn {
+    background: none;
+    border: none;
+    color: #e5793b;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 8px 15px;
+    border-radius: 20px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  .Logo-Texto{
+    color: #e5793b ;
+    display: inline-block;
+    margin-left: 10px;
+    vertical-align: middle;
+  }
+  
+  .nav-btn:hover {
+    background-color: #ffe2d1;
+    color: #d1682f;
+  }
+  
+  /* Botones de acciones (login y register) */
+  .navbar-actions {
+    display: flex;
+    gap: 15px;
+  }
+  
+  .btn-outline {
+    background-color: transparent;
+    color: #e5793b;
+    border: 2px solid #e5793b;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(229, 121, 59, 0.3);
+  }
+  
+  .btn-outline:hover {
+    background-color: #e5793b;
+    color: #fff;
+    box-shadow: 0 6px 10px rgba(229, 121, 59, 0.5);
+  }
+  
+  .btn-filled {
+    background: linear-gradient(135deg, #e79e4f, #e5793b);
+    color: #fff;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 30px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(231, 158, 79, 0.4);
+  }
+  
+  .btn-filled:hover {
+    background: linear-gradient(135deg, #e5793b, #d1682f);
+    box-shadow: 0 6px 10px rgba(231, 158, 79, 0.6);
+  }
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: -100px;
+    background: white;
+    min-width: 600px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    border-radius: 20px;
+    padding: 25px;
+    z-index: 1000;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.dropdown-item {
+    padding: 20px;
+    border: none;
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    transition: all 0.3s ease;
+}
+
+.dropdown-item i {
+    color: #e5793b;
+    font-size: 24px;
+    margin-top: 3px;
+}
+
+.dropdown-item h4 {
+    color: #333;
+    margin: 0 0 8px 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.dropdown-item p {
+    color: #666;
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.ver-mas-btn {
+    grid-column: 1 / -1;
+    padding: 12px;
+    margin-top: 15px;
+    background: #f8f9fa;
+    color: #0066ff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.ver-mas-btn:hover {
+    background: #e9ecef;
+}
+
+.nav-btn.with-arrow {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.nav-btn.with-arrow i {
+    font-size: 12px;
+    transition: transform 0.3s ease;
+}
+
+.dropdown:hover .nav-btn.with-arrow i {
+    transform: rotate(-180deg);
+}
+
+.dropdown-content {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+}
+
+.dropdown:hover .dropdown-content {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+  

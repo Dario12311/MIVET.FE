@@ -1,0 +1,92 @@
+<div class="dashboard">
+    <aside class="sidebar">
+        <h1 class="logo">MIVET</h1>
+        <nav class="menu">
+            <a class="menu-item" [class.active]="selectedItem === 'mascotas'" (click)="selectItem('mascotas')">
+                <i class="fas fa-paw"></i>
+                <span>Mis Mascotas</span>
+            </a>
+            <a class="menu-item" [class.active]="selectedItem === 'historiaClinicas'" (click)="selectItem('historiaClinicas')">
+                <i class="fas fa-clipboard"></i>
+                <span>Historial Clínico</span>
+            </a>
+            <a class="menu-item">
+                <i class="fas fa-sync"></i>
+                <span>Rotaciones</span>
+            </a>
+            <a class="menu-item">
+                <i class="fas fa-users"></i>
+                <span>Pacientes</span>
+            </a>
+            <a class="menu-item">
+                <i class="fas fa-clock"></i>
+                <span>Asignación de Turnos</span>
+            </a>
+            <a class="menu-item">
+                <i class="fas fa-box"></i>
+                <span>Productos</span>
+            </a>
+            <a class="menu-item">
+                <i class="fas fa-file-invoice"></i>
+                <span>Facturación</span>
+            </a>
+            <a class="menu-item">
+                <i class="fas fa-building"></i>
+                <span>Empresa</span>
+            </a>
+            <a class="menu-item">
+                <i class="fas fa-bell"></i>
+                <span>Notificaciones</span>
+            </a>
+        </nav>
+    </aside>
+
+    <div class="main-content">
+       
+        <div class="content-wrapper">
+            <div class="doctor-info-card">
+                <img src="assets/Imagenes/Logo.PNG" alt="Dr. Gladys" class="doctor-avatar">
+                <div class="doctor-details">
+                    <h2>Dr. Gladys</h2>
+                    <p>Oncología • 10am-4 pm</p>
+                    <p>Desde Clínica San Clara</p>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>40</h3>
+                    <p>Turnos</p>
+                    <small>Ayer 25 Turnos</small>
+                </div>
+                <div class="stat-card">
+                    <h3>14</h3>
+                    <p>Mascotas</p>
+                    <small>Ayer 9 Mascotas</small>
+                </div>
+                <div class="stat-card">
+                    <h3>14</h3>
+                    <p>Operaciones</p>
+                    <small>Ayer 8 Opns</small>
+                </div>
+                <div class="stat-card">
+                    <h3>15</h3>
+                    <p>Doctores</p>
+                    <small>Ayer 12 Doct</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="calendar-section">
+            <div class="calendar-header">
+                <h2>Noviembre 26, 2024</h2>
+            </div>
+            <p-calendar [inline]="true" 
+                        [showWeek]="true"
+                        [locale]="es"
+                        [showOtherMonths]="false"
+                        styleClass="custom-calendar">
+            </p-calendar>
+        </div>
+    </div>
+</div>

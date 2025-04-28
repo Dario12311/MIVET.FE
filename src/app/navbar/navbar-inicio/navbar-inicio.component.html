@@ -1,0 +1,55 @@
+<nav class="navbar">
+    <div class="navbar-logo">
+        <img src="assets/Imagenes/Logo2.png" alt="MiVET" />
+        <span class="Logo-Texto">MIVET</span>
+    </div>
+    
+    <ul class="navbar-links">
+        <li><button class="nav-btn" [routerLink]="['/Inicio']">Inicio</button></li>
+        <li class="dropdown">
+            <button class="nav-btn with-arrow">
+                Funcionalidades
+                <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="dropdown-content">
+                <div class="dropdown-item">
+                    <i class="fas fa-notes-medical"></i>
+                    <div>
+                        <h4>Historia Clínica</h4>
+                        <p>Módulo de gestión de historial clínico para tu veterinaria</p>
+                    </div>
+                </div>
+                <div class="dropdown-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <div>
+                        <h4>Agenda</h4>
+                        <p>No solo es ordenar la veterinaria si no todo tu día</p>
+                    </div>
+                </div>
+                <div class="dropdown-item">
+                    <i class="fas fa-tasks"></i>
+                    <div>
+                        <h4>Gestión y administración</h4>
+                        <p>Maneja cada aspecto de tu veterinaria desde un solo lugar</p>
+                    </div>
+                </div>
+                <div class="dropdown-item">
+                    <i class="fas fa-bell"></i>
+                    <div>
+                        <h4>Notificaciones y recordatorios</h4>
+                        <p>Fideliza a todos tus tutores enviando notificaciones y seguimientos</p>
+                    </div>
+                </div>
+                <button class="ver-mas-btn" [routerLink]="['/Funcionalidades']">Ver todas las funciones</button>
+            </div>
+        </li>
+        <li><button class="nav-btn">Planes</button></li>
+        <li><button class="nav-btn">Novedades</button></li>
+    </ul>
+
+    <div class="navbar-actions">
+        <button class="btn-outline" [routerLink]="['/Login']">Iniciar Sesión</button>
+        <button class="btn-filled">Registrarse</button>
+    </div>
+</nav>
+  

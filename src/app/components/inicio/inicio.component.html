@@ -1,0 +1,168 @@
+<app-navbar-inicio></app-navbar-inicio>
+<div #inicioContainer class="inicio">
+    <div class="hero-container">
+        <div class="video-background">
+            <video autoplay muted loop playsinline>
+                <source src="assets/Imagenes/Diseño.mp4" type="video/mp4">
+            </video>
+            <div class="overlay"></div>
+        </div>
+
+        <section class="hero2">
+            <div class="navar-logo">
+                <img src="assets/Imagenes/Logo3.png" alt="MiVET" />
+                <span class="logo-text">MIVET</span>
+            </div>
+            <div class="hero-content">
+                <h1 style="font-size: 30px;">¡Optimiza tu Clínica Veterinaria con MiVET!</h1>
+                <p>Software diseñado para el gestionamiento de Clinicas Veterinarias.</p>
+                <a href="https://wa.me/573147683027" target="_blank" class="btn-primary">Más Información</a>
+            </div>
+        </section>
+
+        <section class="hero">
+            <div class="hero-video">
+                <video autoplay muted loop playsinline>
+                    <source src="assets/videos/hero-video.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="devices-image">
+                <img src="assets/Imagenes/Inicio4.png" alt="Dispositivos MIVET">
+            </div>
+        </section>
+    </div>
+
+    <!-- ¿Qué es MiVET? -->
+    <section class="section intro">
+        <div class="content">
+            <div class="text">
+                <h2>¿Qué es MiVET?</h2>
+                <p>MiVET es un software de gestión veterinaria que facilita la administración
+                    de citas médicas y estéticas para mascotas, optimizando el tiempo de los
+                     profesionales y mejorando la experiencia de los propietarios.</p>
+            </div>
+            <div class="image">
+                <img src="assets/Imagenes/seccion1.png" alt="MiVET" style="width: 100%; max-width: 500px;">
+            </div>
+        </div>
+    </section>
+
+    <!-- Características Principales -->
+    <section class="section features">
+        <div class="features-container">
+            <!-- Columna izquierda -->
+            <div class="features-header">
+                <span class="subtitle">MIVET TAMBIÉN OFRECE:</span>
+                <h2>Herramientas Para<br>Hacer Crecer Tu<br>Clínica</h2>
+                <p>Con MIVET Software Veterinario tienes herramientas<br>para realizar marketing, fidelizar tus clientes y capacitar<br>a tu equipo.</p>
+                <p class="secondary-text">Para hacer crecer tu clínica veterinaria</p>
+                <button class="btn-quiero-mivet" onclick="window.open('https://wa.me/573147683027', '_blank')">Quiero MIVET</button>
+            </div>
+
+            <!-- Columna derecha -->
+            <div class="features-list">
+                <h3 class="features-title">Que Herramientas Me Ofrece:</h3>
+                <div class="features-grid">
+                    <!-- Columna izquierda de iconos -->
+                    <div class="feature-column">
+                        <div class="feature-item">
+                            <i class="fas fa-bell"></i>
+                            <span>Notificaciones Whatsapp Email Marketing</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-mobile-alt"></i>
+                            <span>Notificaciones Push</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-calendar"></i>
+                            <span>Recordatorios:</span>
+                            <div class="feature-details">
+                                <div>Cumpleaños</div>
+                                <div>Próximas Vacunas</div>
+                                <div>Próximas Desparasitaciones</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Columna derecha de iconos -->
+                    <div class="feature-column">
+                        <div class="feature-item">
+                            <i class="fas fa-bullseye"></i>
+                            <span>Traza Metas</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-users"></i>
+                            <span>Gestiona roles</span>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Beneficios -->
+    <section class="section beneficios">
+        <h2>Beneficios de Usar MiVET</h2>
+        <div class="cards-container">
+            <div class="cards-grid">
+                <div class="card">
+                    <i class="fas fa-globe"></i>
+                    <span>Acceso desde cualquier lugar</span>
+                </div>
+                <div class="card">
+                    <i class="fas fa-history"></i>
+                    <span>Historial clínico siempre actualizado</span>
+                </div>
+                <div class="card">
+                    <i class="fas fa-comments"></i>
+                    <span>Mejor comunicación con clientes</span>
+                </div>
+                <div class="card">
+                    <i class="fas fa-warehouse"></i>
+                    <span>Mayor control de inventario</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contacto -->
+    <section id="contacto" class="section contacto">
+        <h2>¿Listo para llevar tu clínica al siguiente nivel?</h2>
+        <p>Contáctanos y solicita una demostración personalizada.</p>
+        <div class="contact-button-container">
+            <button class="btn-primary contact-btn" (click)="openContactModal()">Contáctanos</button>
+        </div>
+    </section>
+    
+    <!-- Modal de Contacto -->
+    <div class="modal" [class.show]="isModalOpen">
+        <div class="modal-content">
+            <h3>Elige cómo contactarnos</h3>
+            <div class="contact-options">
+                <a href="mailto:dariomolinarua15@gmail.com" class="contact-option">
+                    <i class="fas fa-envelope"></i> Correo Electrónico
+                </a>
+                <a href="https://wa.me/573147683027" target="_blank" class="contact-option">
+                    <i class="fab fa-whatsapp"></i> WhatsApp
+                </a>
+            </div>
+            <button class="close-modal" (click)="closeModal()">×</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-info">
+                <p>&copy; 2024 MIVET. Todos los derechos reservados.</p>
+                <p>Software de gestión veterinaria</p>
+            </div>
+            <div class="footer-links">
+                <a href="/privacidad">Política de Privacidad</a>
+                <a href="/terminos">Términos de Uso</a>
+                <a href="/contacto">Contacto</a>
+            </div>
+        </div>
+    </footer>
+</div>

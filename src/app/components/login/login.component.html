@@ -1,0 +1,50 @@
+<app-navbar-inicio></app-navbar-inicio>
+<div class="container" [class.sign-up-mode]="isSignUpMode">
+    <div class="form-container sign-in-container">
+      <form>
+        <h1>Sign In</h1>
+        <div class="social-container">
+          <a href="#" class="social">G</a>
+          <a href="#" class="social">F</a>
+          <a href="#" class="social">In</a>
+        </div>
+        <span>or use your email</span>
+        <input type="email" placeholder="Email" />
+        <input type="password" placeholder="Password" />
+        <a href="#">Forgot your password?</a>
+        <button>Sign In</button>
+      </form>
+    </div>
+  
+    <div class="form-container sign-up-container">
+      <form>
+        <h1>Create Account</h1>
+        <div class="social-container">
+          <a href="#" class="social">G</a>
+          <a href="#" class="social">F</a>
+          <a href="#" class="social">In</a>
+        </div>
+        <span>or use your email for registration</span>
+        <input type="text" placeholder="Name" />
+        <input type="email" placeholder="Email" />
+        <input type="password" placeholder="Password" />
+        <button>Sign Up</button>
+      </form>
+    </div>
+  
+    <div class="overlay-container">
+      <div class="overlay">
+        <div class="overlay-panel overlay-left">
+          <h1>Welcome Back!</h1>
+          <p>To keep connected with us, please login with your personal info</p>
+          <button class="ghost" (click)="toggleMode()">Sign In</button>
+        </div>
+        <div class="overlay-panel overlay-right">
+          <h1>Hello, Friend!</h1>
+          <p>Register with your personal details to use all of our features</p>
+          <button class="ghost" (click)="toggleMode()">Sign Up</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
