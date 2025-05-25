@@ -180,4 +180,153 @@ a {
     text-decoration: none;
     margin: 15px 0;
 }
+
+.error-message {
+    color: #e74c3c;
+    font-size: 14px;
+    margin: 10px 0;
+    text-align: center;
+  }
+
+/* Estilos para las secciones del formulario */ 
+.form-section { 
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.form-section h3 { 
+  margin-bottom: 1.5rem; 
+  color: #444; 
+  font-size: 1.2rem;
+  width: 100%;
+  text-align: center;
+}
+
+/* Estilos para los campos de entrada */
+.input-field {
+  position: relative;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.input-field i {
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  transform: translateY(-50%);
+  color: #8B4513;
+  font-size: 18px;
+}
+
+.input-field input,
+.input-field select {
+  width: 100%;
+  padding: 12px 15px 12px 45px;
+  background: #eee;
+  border: none;
+  border-radius: 20px;
+  font-size: 14px;
+  color: #333;
+}
+
+/* Estilos para los botones de navegación */ 
+.form-navigation { 
+  display: flex; 
+  justify-content: space-between; 
+  width: 100%; 
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.form-navigation button { 
+  width: 45%; 
+  margin: 0;
+}
+
+/* Estilos para el select */ 
+.form-select { 
+  width: 100%; 
+  background: #eee; 
+  border: none; 
+  outline: none; 
+  padding: 12px 15px 12px 45px; 
+  font-size: 14px; 
+  color: #333; 
+  border-radius: 20px; 
+  height: auto;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+}
+
+/* Ajustes para el formulario de registro */ 
+.sign-up-form { 
+  max-height: 500px; 
+  overflow-y: auto; 
+  padding-right: 10px;
+  width: 100%;
+}
+
+/* Ajustes adicionales para mejorar la visualización en dispositivos móviles */
+@media (max-width: 768px) {
+  .container {
+    min-height: 650px;
+  }
+  
+  .form-container {
+    width: 100%;
+  }
+  
+  .overlay-container {
+    display: none;
+  }
+  
+  .sign-in-container,
+  .sign-up-container {
+    width: 100%;
+  }
+  
+  .container.sign-up-mode .sign-up-container {
+    transform: translateX(0);
+  }
+  
+  form {
+    padding: 0 20px;
+  }
+}
+
+/* Barra de desplazamiento personalizada */
+.sign-up-form::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sign-up-form::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.sign-up-form::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+.sign-up-form::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Estilos para mensajes de error de validación */
+.input-field.invalid input,
+.input-field.invalid select {
+  border: 1px solid #ff3860;
+}
+
+.validation-message {
+  color: #ff3860;
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+  margin-left: 1rem;
+}
   

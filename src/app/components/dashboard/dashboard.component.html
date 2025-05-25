@@ -1,92 +1,226 @@
-<div class="dashboard">
-    <aside class="sidebar">
-        <h1 class="logo">MIVET</h1>
-        <nav class="menu">
-            <a class="menu-item" [class.active]="selectedItem === 'mascotas'" (click)="selectItem('mascotas')">
-                <i class="fas fa-paw"></i>
-                <span>Mis Mascotas</span>
-            </a>
-            <a class="menu-item" [class.active]="selectedItem === 'historiaClinicas'" (click)="selectItem('historiaClinicas')">
-                <i class="fas fa-clipboard"></i>
-                <span>Historial Clínico</span>
-            </a>
-            <a class="menu-item">
-                <i class="fas fa-sync"></i>
-                <span>Rotaciones</span>
-            </a>
-            <a class="menu-item">
-                <i class="fas fa-users"></i>
-                <span>Pacientes</span>
-            </a>
-            <a class="menu-item">
-                <i class="fas fa-clock"></i>
-                <span>Asignación de Turnos</span>
-            </a>
-            <a class="menu-item">
-                <i class="fas fa-box"></i>
-                <span>Productos</span>
-            </a>
-            <a class="menu-item">
-                <i class="fas fa-file-invoice"></i>
-                <span>Facturación</span>
-            </a>
-            <a class="menu-item">
-                <i class="fas fa-building"></i>
-                <span>Empresa</span>
-            </a>
-            <a class="menu-item">
-                <i class="fas fa-bell"></i>
-                <span>Notificaciones</span>
-            </a>
-        </nav>
-    </aside>
+<app-navbar-administrador></app-navbar-administrador>
 
-    <div class="main-content">
-       
-        <div class="content-wrapper">
-            <div class="doctor-info-card">
-                <img src="assets/Imagenes/Logo.PNG" alt="Dr. Gladys" class="doctor-avatar">
-                <div class="doctor-details">
-                    <h2>Dr. Gladys</h2>
-                    <p>Oncología • 10am-4 pm</p>
-                    <p>Desde Clínica San Clara</p>
-                </div>
-            </div>
-
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <h3>40</h3>
-                    <p>Turnos</p>
-                    <small>Ayer 25 Turnos</small>
-                </div>
-                <div class="stat-card">
-                    <h3>14</h3>
-                    <p>Mascotas</p>
-                    <small>Ayer 9 Mascotas</small>
-                </div>
-                <div class="stat-card">
-                    <h3>14</h3>
-                    <p>Operaciones</p>
-                    <small>Ayer 8 Opns</small>
-                </div>
-                <div class="stat-card">
-                    <h3>15</h3>
-                    <p>Doctores</p>
-                    <small>Ayer 12 Doct</small>
-                </div>
-            </div>
-        </div>
-
-        <div class="calendar-section">
-            <div class="calendar-header">
-                <h2>Noviembre 26, 2024</h2>
-            </div>
-            <p-calendar [inline]="true" 
-                        [showWeek]="true"
-                        [locale]="es"
-                        [showOtherMonths]="false"
-                        styleClass="custom-calendar">
-            </p-calendar>
-        </div>
+<div class="dashboard-container">
+  <div class="dashboard-sidebar">
+    <div class="sidebar-header">
+      <img src="assets/Imagenes/Logo.PNG" alt="Avatar" class="avatar" />
+      <div class="user-details">
+        <h3>Dra. Gladys</h3>
+        <p>Oncología</p>
+        <span class="status online">En línea</span>
+      </div>
     </div>
+    
+    <div class="sidebar-menu">
+      <a class="menu-item active" routerLink="/dashboard">
+        <i class="fas fa-home"></i>
+        <span>Dashboard</span>
+      </a>
+      <a class="menu-item" routerLink="/dashboard/mascotas">
+        <i class="fas fa-paw"></i>
+        <span>Mascotas</span>
+      </a>
+      <a class="menu-item" routerLink="/dashboard/historial">
+        <i class="fas fa-clipboard"></i>
+        <span>Historial Clínico</span>
+      </a>
+      <a class="menu-item" routerLink="/dashboard/pacientes">
+        <i class="fas fa-users"></i>
+        <span>Pacientes</span>
+      </a>
+      <a class="menu-item" routerLink="/dashboard/turnos">
+        <i class="fas fa-clock"></i>
+        <span>Turnos</span>
+      </a>
+      <a class="menu-item" routerLink="/dashboard/productos">
+        <i class="fas fa-box"></i>
+        <span>Productos</span>
+      </a>
+      <a class="menu-item" routerLink="/dashboard/facturacion">
+        <i class="fas fa-file-invoice"></i>
+        <span>Facturación</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="dashboard-main">
+    <div class="main-header">
+      <h1>Bienvenido, Dra. Gladys</h1>
+      <p>Clínica San Clara • 10:00 - 16:00</p>
+      
+      <div class="header-actions">
+        <button class="action-btn">
+          <i class="fas fa-bell"></i>
+          <span class="notification-badge">3</span>
+        </button>
+        <button class="action-btn">
+          <i class="fas fa-envelope"></i>
+          <span class="notification-badge">5</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="stats-container">
+      <div class="stat-card primary">
+        <div class="stat-icon">
+          <i class="fas fa-calendar-check"></i>
+        </div>
+        <div class="stat-info">
+          <h3>40</h3>
+          <p>Turnos</p>
+          <div class="stat-trend up">
+            <i class="fas fa-arrow-up"></i>
+            <span>+15 vs ayer</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="stat-card success">
+        <div class="stat-icon">
+          <i class="fas fa-paw"></i>
+        </div>
+        <div class="stat-info">
+          <h3>14</h3>
+          <p>Mascotas</p>
+          <div class="stat-trend up">
+            <i class="fas fa-arrow-up"></i>
+            <span>+5 vs ayer</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="stat-card warning">
+        <div class="stat-icon">
+          <i class="fas fa-stethoscope"></i>
+        </div>
+        <div class="stat-info">
+          <h3>14</h3>
+          <p>Operaciones</p>
+          <div class="stat-trend up">
+            <i class="fas fa-arrow-up"></i>
+            <span>+6 vs ayer</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="stat-card info">
+        <div class="stat-icon">
+          <i class="fas fa-user-md"></i>
+        </div>
+        <div class="stat-info">
+          <h3>15</h3>
+          <p>Doctores</p>
+          <div class="stat-trend up">
+            <i class="fas fa-arrow-up"></i>
+            <span>+3 vs ayer</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dashboard-grid">
+      <div class="grid-item appointments">
+        <div class="item-header">
+          <h2>Próximas Citas</h2>
+          <button class="view-all">Ver todas</button>
+        </div>
+        
+        <div class="appointment-list">
+          <div class="appointment-item">
+            <div class="appointment-time">
+              <span class="time">10:30</span>
+              <span class="date">Hoy</span>
+            </div>
+            <div class="appointment-details">
+              <h4>Luna (Gato)</h4>
+              <p>Control de rutina</p>
+            </div>
+            <div class="appointment-owner">
+              <span>Dueño: Carlos Pérez</span>
+            </div>
+          </div>
+          
+          <div class="appointment-item">
+            <div class="appointment-time">
+              <span class="time">11:45</span>
+              <span class="date">Hoy</span>
+            </div>
+            <div class="appointment-details">
+              <h4>Rocky (Perro)</h4>
+              <p>Vacunación</p>
+            </div>
+            <div class="appointment-owner">
+              <span>Dueño: María López</span>
+            </div>
+          </div>
+          
+          <div class="appointment-item">
+            <div class="appointment-time">
+              <span class="time">14:15</span>
+              <span class="date">Hoy</span>
+            </div>
+            <div class="appointment-details">
+              <h4>Pelusa (Conejo)</h4>
+              <p>Revisión dental</p>
+            </div>
+            <div class="appointment-owner">
+              <span>Dueño: Ana Gómez</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="grid-item calendar">
+        <div class="item-header">
+          <h2>Calendario</h2>
+        </div>
+        <p-calendar 
+          [inline]="true"
+          [showWeek]="true"
+          [locale]="es"
+          [showOtherMonths]="false"
+          styleClass="custom-calendar">
+        </p-calendar>
+      </div>
+      
+      <div class="grid-item recent-activity">
+        <div class="item-header">
+          <h2>Actividad Reciente</h2>
+        </div>
+        
+        <div class="activity-list">
+          <div class="activity-item">
+            <div class="activity-icon">
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="activity-details">
+              <p>Consulta completada: <strong>Rocky</strong></p>
+              <span class="activity-time">Hace 35 minutos</span>
+            </div>
+          </div>
+          
+          <div class="activity-item">
+            <div class="activity-icon">
+              <i class="fas fa-plus-circle"></i>
+            </div>
+            <div class="activity-details">
+              <p>Nueva cita agendada: <strong>Luna</strong></p>
+              <span class="activity-time">Hace 1 hora</span>
+            </div>
+          </div>
+          
+          <div class="activity-item">
+            <div class="activity-icon">
+              <i class="fas fa-file-medical"></i>
+            </div>
+            <div class="activity-details">
+              <p>Historial actualizado: <strong>Pelusa</strong></p>
+              <span class="activity-time">Hace 2 horas</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+  

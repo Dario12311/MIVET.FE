@@ -1,48 +1,189 @@
 <app-navbar-inicio></app-navbar-inicio>
 <div class="container" [class.sign-up-mode]="isSignUpMode">
     <div class="form-container sign-in-container">
-      <form>
-        <h1>Sign In</h1>
+      <form (ngSubmit)="login()">
+        <h1>Iniciar Sesión</h1>
         <div class="social-container">
-          <a href="#" class="social">G</a>
-          <a href="#" class="social">F</a>
-          <a href="#" class="social">In</a>
+          <a href="#" class="social"><i class="fab fa-google"></i></a>
+          <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
         </div>
-        <span>or use your email</span>
-        <input type="email" placeholder="Email" />
-        <input type="password" placeholder="Password" />
-        <a href="#">Forgot your password?</a>
-        <button>Sign In</button>
+        <span>o usa tu correo electrónico</span>
+        <input type="text" placeholder="Identificacion" [(ngModel)]="nombreUsuario" name="nombreUsuario" required />
+        <input type="password" placeholder="Contraseña" [(ngModel)]="password" name="password" required />
+        <div *ngIf="mensajeError" class="error-message">
+          {{ mensajeError }}
+        </div>
+        <a href="#">¿Olvidaste tu contraseña?</a>
+        <button type="submit" [disabled]="cargando">
+          <span *ngIf="!cargando">Iniciar Sesión</span>
+          <span *ngIf="cargando">Cargando...</span>
+        </button>
       </form>
     </div>
   
     <div class="form-container sign-up-container">
-      <form>
-        <h1>Create Account</h1>
-        <div class="social-container">
-          <a href="#" class="social">G</a>
-          <a href="#" class="social">F</a>
-          <a href="#" class="social">In</a>
+      <form [formGroup]="registroForm" (ngSubmit)="registrar()">
+        <h1>Crear Cuenta</h1>
+        
+        <div [ngSwitch]="seccionActual" class="sign-up-form">
+          <!-- Sección 1: Información de Usuario -->
+          <div *ngSwitchCase="1" class="form-section">
+            <h3>Información de Usuario</h3>
+            <div class="input-field">
+              <i class="fas fa-user"></i>
+              <input type="text" placeholder="Nombre de Usuario" formControlName="nombreUsuario">
+            </div>
+            <div class="input-field">
+              <i class="fas fa-lock"></i>
+              <input type="password" placeholder="Contraseña" formControlName="password">
+            </div>
+            <div class="input-field">
+              <i class="fas fa-lock"></i>
+              <input type="password" placeholder="Confirmar Contraseña" formControlName="confirmarPassword">
+            </div>
+          </div>
+
+          <!-- Sección 2: Información Personal -->
+          <div *ngSwitchCase="2" class="form-section">
+            <h3>Información Personal</h3>
+            <div class="input-field">
+              <i class="fas fa-id-card"></i>
+              <select formControlName="tipoDocumento" class="form-select">
+                <option value="">Tipo de Documento</option>
+                <option value="1">Cédula de Ciudadanía</option>
+                <option value="2">Tarjeta de Identidad</option>
+                <option value="3">Pasaporte</option>
+                <option value="4">Cédula de Extranjería</option>
+              </select>
+            </div>
+            <div class="input-field">
+              <i class="fas fa-id-card"></i>
+              <input type="text" placeholder="Número de Documento" formControlName="numeroDocumento">
+            </div>
+            <div class="input-field">
+              <i class="fas fa-user"></i>
+              <input type="text" placeholder="Primer Nombre" formControlName="primerNombre">
+            </div>
+            <div class="input-field">
+              <i class="fas fa-user"></i>
+              <input type="text" placeholder="Segundo Nombre (opcional)" formControlName="segundoNombre">
+            </div>
+            <div class="input-field">
+              <i class="fas fa-user"></i>
+              <input type="text" placeholder="Primer Apellido" formControlName="primerApellido">
+            </div>
+            <div class="input-field">
+              <i class="fas fa-user"></i>
+              <input type="text" placeholder="Segundo Apellido (opcional)" formControlName="segundoApellido">
+            </div>
+          </div>
+
+          <!-- Sección 3: Información de Contacto -->
+          <div *ngSwitchCase="3" class="form-section">
+            <h3>Información de Contacto</h3>
+            <div class="input-field">
+              <i class="fas fa-envelope"></i>
+              <input type="email" placeholder="Correo Electrónico" formControlName="correoElectronico">
+            </div>
+            <div class="input-field">
+              <i class="fas fa-phone"></i>
+              <input type="tel" placeholder="Teléfono" formControlName="telefono">
+            </div>
+            <div class="input-field">
+              <i class="fas fa-mobile-alt"></i>
+              <input type="tel" placeholder="Celular" formControlName="celular">
+            </div>
+            <div class="input-field">
+              <i class="fas fa-map-marker-alt"></i>
+              <input type="text" placeholder="Dirección" formControlName="direccion">
+            </div>
+            <div class="input-field">
+              <i class="fas fa-city"></i>
+              <input type="text" placeholder="Ciudad" formControlName="ciudad">
+            </div>
+            <div class="input-field">
+              <i class="fas fa-map"></i>
+              <input type="text" placeholder="Departamento" formControlName="departamento">
+            </div>
+            <div class="input-field">
+              <i class="fas fa-globe"></i>
+              <input type="text" placeholder="País" formControlName="pais">
+            </div>
+            <div class="input-field">
+              <i class="fas fa-mail-bulk"></i>
+              <input type="text" placeholder="Código Postal" formControlName="codigoPostal">
+            </div>
+          </div>
+
+          <!-- Sección 4: Información Adicional -->
+          <div *ngSwitchCase="4" class="form-section">
+            <h3>Información Adicional</h3>
+            <div class="input-field">
+              <i class="fas fa-venus-mars"></i>
+              <select formControlName="genero" class="form-select">
+                <option value="">Género</option>
+                <option value="M">Masculino</option>
+                <option value="F">Femenino</option>
+                <option value="O">Otro</option>
+              </select>
+            </div>
+            <div class="input-field">
+              <i class="fas fa-ring"></i>
+              <select formControlName="estadoCivil" class="form-select">
+                <option value="">Estado Civil</option>
+                <option value="S">Soltero/a</option>
+                <option value="C">Casado/a</option>
+                <option value="D">Divorciado/a</option>
+                <option value="V">Viudo/a</option>
+              </select>
+            </div>
+            <div class="input-field">
+              <i class="fas fa-calendar"></i>
+              <input type="date" placeholder="Fecha de Nacimiento" formControlName="fechaNacimiento">
+            </div>
+            <div class="input-field">
+              <i class="fas fa-map-pin"></i>
+              <input type="text" placeholder="Lugar de Nacimiento" formControlName="lugarNacimiento">
+            </div>
+            <div class="input-field">
+              <i class="fas fa-flag"></i>
+              <input type="text" placeholder="Nacionalidad" formControlName="nacionalidad">
+            </div>
+          </div>
         </div>
-        <span>or use your email for registration</span>
-        <input type="text" placeholder="Name" />
-        <input type="email" placeholder="Email" />
-        <input type="password" placeholder="Password" />
-        <button>Sign Up</button>
+
+        <div *ngIf="mensajeError" class="error-message">
+          {{ mensajeError }}
+        </div>
+
+        <!-- Botones de navegación entre secciones -->
+        <div class="form-navigation">
+          <button type="button" *ngIf="seccionActual > 1" (click)="seccionAnterior()" class="ghost">
+            Anterior
+          </button>
+          <button type="button" *ngIf="seccionActual < totalSecciones" (click)="siguienteSeccion()">
+            Siguiente
+          </button>
+          <button type="submit" *ngIf="seccionActual === totalSecciones" [disabled]="cargando || !registroForm.valid">
+            <span *ngIf="!cargando">Registrarse</span>
+            <span *ngIf="cargando">Cargando...</span>
+          </button>
+        </div>
       </form>
     </div>
   
     <div class="overlay-container">
       <div class="overlay">
         <div class="overlay-panel overlay-left">
-          <h1>Welcome Back!</h1>
-          <p>To keep connected with us, please login with your personal info</p>
-          <button class="ghost" (click)="toggleMode()">Sign In</button>
+          <h1>¡Bienvenido de nuevo!</h1>
+          <p>Para mantenerte conectado con nosotros, inicia sesión con tu información personal</p>
+          <button class="ghost" (click)="toggleMode()">Iniciar Sesión</button>
         </div>
         <div class="overlay-panel overlay-right">
-          <h1>Hello, Friend!</h1>
-          <p>Register with your personal details to use all of our features</p>
-          <button class="ghost" (click)="toggleMode()">Sign Up</button>
+          <h1>¡Hola, amigo!</h1>
+          <p>Regístrate con tus datos personales para usar todas nuestras funciones</p>
+          <button class="ghost" (click)="toggleMode()">Registrarse</button>
         </div>
       </div>
     </div>

@@ -1,0 +1,69 @@
+<nav class="navbar-admin" [class.scrolled]="scrolled">
+  <div class="navbar-logo">
+    <img src="assets/Imagenes/Logo2.png" alt="MiVET" />
+    <span class="Logo-Texto">MIVET</span>
+  </div>
+  
+  <ul class="navbar-links">
+    <li><button class="nav-btn" [routerLink]="['/dashboard']">Dashboard</button></li>
+    <li class="dropdown">
+      <button class="nav-btn with-arrow">
+        Gestión
+        <i class="fas fa-chevron-down"></i>
+      </button>
+      <div class="dropdown-content">
+        <button class="dropdown-button" [routerLink]="['/veterinarios']">
+          <div class="dropdown-item">
+            <i class="fas fa-user-md"></i>
+            <div>
+              <h4>Veterinarios</h4>
+              <p>Administra el personal médico</p>
+            </div>
+          </div>
+        </button>
+        <button class="dropdown-button" [routerLink]="['/clientes']">
+          <div class="dropdown-item">
+            <i class="fas fa-users"></i>
+            <div>
+              <h4>Clientes</h4>
+              <p>Gestiona la información de tus clientes</p>
+            </div>
+          </div>
+        </button>
+        <button class="dropdown-button" [routerLink]="['/mascotas']">
+          <div class="dropdown-item">
+            <i class="fas fa-paw"></i>
+            <div>
+              <h4>Mascotas</h4>
+              <p>Administra los registros de mascotas</p>
+            </div>
+          </div>
+        </button>
+        <button class="dropdown-button" [routerLink]="['/citas']">
+          <div class="dropdown-item">
+            <i class="fas fa-calendar-alt"></i>
+            <div>
+              <h4>Citas</h4>
+              <p>Gestiona la agenda de consultas</p>
+            </div>
+          </div>
+        </button>
+      </div>
+    </li>
+    <li><button class="nav-btn" [routerLink]="['/reportes']">Reportes</button></li>
+    <li><button class="nav-btn" [routerLink]="['/configuracion']">Configuración</button></li>
+  </ul>
+
+  <div class="navbar-usuario" (click)="toggleMenu()">
+    <span class="nombre-usuario">{{ nombreUsuario }}</span>
+    <img class="avatar" [src]="avatarUrl || 'assets/Imagenes/default-avatar.png'" alt="Avatar" />
+    <i class="fas fa-chevron-down"></i>
+    
+    <ul class="menu-desplegable" *ngIf="menuVisible">
+      <li><i class="fas fa-user"></i> Mi Perfil</li>
+      <li><i class="fas fa-cog"></i> Configuración</li>
+      <li (click)="cerrarSesion()"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</li>
+    </ul>
+  </div>
+</nav>
+  
