@@ -1,0 +1,155 @@
+:host {
+  display: block;
+  background: #f5f7fa;
+  font-family: 'Segoe UI', sans-serif;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Layout principal */
+.dashboard-container {
+  display: flex;
+  height: calc(100vh - 80px);
+  margin-top: 50px; /* Espacio para el navbar */
+}
+
+/* Sidebar */
+.dashboard-sidebar {
+  width: 260px;
+  background: white;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.sidebar-header {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.avatar {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #4a90e2; /* Color diferente al del administrador */
+  margin-bottom: 15px;
+}
+
+.user-details {
+  text-align: center;
+}
+
+.user-details h3 {
+  margin: 0 0 5px 0;
+  color: #333;
+  font-size: 18px;
+}
+
+.user-details p {
+  margin: 0 0 10px 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.status {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status.online {
+  background-color: rgba(46, 213, 115, 0.15);
+  color: #2ed573;
+}
+
+.sidebar-menu {
+  padding: 20px 0;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 25px;
+  color: #555;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border-left: 3px solid transparent;
+}
+
+.menu-item:hover {
+  background-color: rgba(74, 144, 226, 0.05);
+  color: #4a90e2;
+}
+
+.menu-item.active {
+  background-color: rgba(74, 144, 226, 0.1);
+  color: #4a90e2;
+  border-left: 3px solid #4a90e2;
+}
+
+.menu-item i {
+  margin-right: 15px;
+  font-size: 18px;
+  width: 20px;
+  text-align: center;
+}
+
+/* Contenido principal */
+.dashboard-main {
+  flex: 1;
+  padding: 30px;
+  margin-top: -30px; /* Espacio para el navbar */
+  overflow-y: auto;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .dashboard-container {
+    flex-direction: column;
+  }
+  
+  .dashboard-sidebar {
+    width: 100%;
+    height: auto;
+  }
+  
+  .sidebar-menu {
+    display: flex;
+    overflow-x: auto;
+    padding: 10px;
+  }
+  
+  .menu-item {
+    padding: 10px 15px;
+    border-left: none;
+    border-bottom: 3px solid transparent;
+  }
+  
+  .menu-item.active {
+    border-left: none;
+    border-bottom: 3px solid #4a90e2;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-main {
+    padding: 15px;
+  }
+  
+  .sidebar-header {
+    padding: 15px;
+  }
+  
+  .avatar {
+    width: 70px;
+    height: 70px;
+  }
+}

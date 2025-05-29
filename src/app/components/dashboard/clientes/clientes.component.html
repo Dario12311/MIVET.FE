@@ -1,0 +1,114 @@
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h2>Clientes Registrados</h2>
+        </div>
+    </div>
+
+    <!-- Indicador de carga -->
+    <div *ngIf="cargando" class="text-center mb-4">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Cargando...</span>
+        </div>
+        <p>Cargando clientes...</p>
+    </div>
+
+    <!-- Barra de búsqueda -->
+    <div class="row mb-4" *ngIf="!cargando">
+        <div class="col-md-6">
+            <div class="input-group">
+                <input 
+                    type="text" 
+                    class="form-control" 
+                    placeholder="Buscar por nombre, apellido, documento o correo..." 
+                    [(ngModel)]="searchTerm"
+                    (input)="filtrarClientes()">
+                <button class="btn btn-outline-secondary" type="button" (click)="filtrarClientes()">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+        <div class="col-md-6 text-end">
+            <button class="btn btn-primary" (click)="agregarCliente()">
+                <i class="fas fa-plus"></i> Agregar Cliente
+            </button>
+        </div>
+    </div>
+
+    <!-- Tabla de clientes -->
+    <div class="table-responsive" *ngIf="!cargando">
+        <table class="table table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th>Identificación</th>
+                    <th>Nombres/Apellidos</th>
+                    <th>Correo Electrónico</th>
+                    <th>Teléfono</th>
+                    <th>Estado</th>
+                    <th>Mascotas</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let cliente of clientes" [class.table-secondary]="!estaActivo(cliente.estado)">
+                    <td data-label="Identificación">{{cliente.numeroDocumento}}</td>
+                    <td data-label="Nombres/Apellidos">
+                        {{cliente.primerNombre}} {{cliente.segundoNombre}} {{cliente.primerApellido}} {{cliente.segundoApellido}}
+                    </td>
+                    <td data-label="Correo Electrónico">{{cliente.correo}}</td>
+                    <td data-label="Teléfono">{{cliente.telefono}}</td>
+                    <td data-label="Estado">
+                        <span class="badge" 
+                              [class.bg-success]="estaActivo(cliente.estado)"
+                              [class.bg-secondary]="!estaActivo(cliente.estado)">
+                            {{estaActivo(cliente.estado) ? 'Activo' : 'Inactivo'}}
+                        </span>
+                    </td>
+                    <td data-label="Mascotas">
+                        <button class="btn btn-info btn-sm" 
+                                (click)="verMascotas(cliente.id)"
+                                [disabled]="!estaActivo(cliente.estado)">
+                            <i class="fas fa-paw"></i> Ver Mascotas ({{cliente.cantidadMascotas}})
+                        </button>
+                    </td>
+                    <td data-label="Acciones">
+                        <div class="btn-group">
+                            <button class="btn btn-warning btn-sm" 
+                                    (click)="editarCliente(cliente.numeroDocumento)"
+                                    title="Editar cliente">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-danger btn-sm" (click)="desactivateClient(cliente.numeroDocumento)">
+                              <i class="fas fa-ban"></i> Desactivar
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Mensaje cuando no hay clientes -->
+        <div *ngIf="clientes.length === 0" class="text-center py-4">
+            <p class="text-muted">No se encontraron clientes.</p>
+        </div>
+    </div>
+
+    <!-- Paginación -->
+    <nav aria-label="Page navigation" *ngIf="!cargando && totalPages > 1">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" [class.disabled]="currentPage === 1">
+                <a class="page-link" (click)="cambiarPagina(currentPage - 1)" style="cursor: pointer;">
+                    <i class="fas fa-chevron-left"></i> Anterior
+                </a>
+            </li>
+            <li class="page-item" *ngFor="let page of pages" [class.active]="page === currentPage">
+                <a class="page-link" (click)="cambiarPagina(page)" style="cursor: pointer;">{{page}}</a>
+            </li>
+            <li class="page-item" [class.disabled]="currentPage === totalPages">
+                <a class="page-link" (click)="cambiarPagina(currentPage + 1)" style="cursor: pointer;">
+                    Siguiente <i class="fas fa-chevron-right"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>

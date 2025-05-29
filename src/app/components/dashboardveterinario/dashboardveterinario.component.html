@@ -1,0 +1,47 @@
+<div class="dashboard-container">
+    <div class="dashboard-sidebar">
+      <div class="sidebar-header">
+        <img src="assets/Imagenes/Logo.PNG" alt="Avatar" class="avatar" />
+        <div class="user-details">
+          <h3>{{ nombreUsuario }}</h3>
+          <p>Médico Veterinario</p>
+          <span class="status online">En línea</span>
+        </div>
+      </div>
+      
+      <div class="sidebar-menu">
+        <a class="menu-item" [routerLink]="['/dashboard-veterinario']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="{exact: true}">
+          <i class="fas fa-home"></i>
+          <span>Inicio</span>
+        </a>
+        <a class="menu-item" routerLink="/dashboard-veterinario/consultas" routerLinkActive="active">
+          <i class="fas fa-stethoscope"></i>
+          <span>Consultas</span>
+        </a>
+        <a class="menu-item" routerLink="/dashboard-veterinario/historial" routerLinkActive="active">
+          <i class="fas fa-clipboard"></i>
+          <span>Historial Clínico</span>
+        </a>
+        <a class="menu-item" routerLink="/dashboard-veterinario/mascotas" routerLinkActive="active">
+          <i class="fas fa-paw"></i>
+          <span>Mascotas</span>
+        </a>
+        <a class="menu-item" routerLink="/dashboard-veterinario/citas" routerLinkActive="active">
+          <i class="fas fa-calendar-alt"></i>
+          <span>Citas</span>
+        </a>
+        <a class="menu-item" routerLink="/dashboard-veterinario/recetas" routerLinkActive="active">
+          <i class="fas fa-prescription"></i>
+          <span>Recetas</span>
+        </a>
+        <a class="menu-item" routerLink="/dashboard-veterinario/vacunacion" routerLinkActive="active">
+          <i class="fas fa-syringe"></i>
+          <span>Vacunación</span>
+        </a>
+      </div>
+    </div>
+  
+    <div class="dashboard-main">
+      <router-outlet></router-outlet>
+    </div>
+  </div>

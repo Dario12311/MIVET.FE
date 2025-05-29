@@ -13,6 +13,18 @@ import { FuncionalidadesComponent } from './components/funcionalidades/funcional
 import { LoginComponent } from './components/login/login.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NavbarAdministradorComponent } from './components/navbar/navbar-administrador/navbar-administrador.component';
+import { ClientesComponent } from './components/dashboard/clientes/clientes.component';
+import { InicioDashboardComponent } from './components/dashboard/inicio-dashboard/inicio-dashboard.component';
+import { UpdateclienteComponent } from './components/dashboard/clientes/updatecliente/updatecliente.component';
+import { MascotasComponent } from './components/dashboard/mascotas/mascotas.component';
+import { RegistromascotaComponent } from './components/dashboard/mascotas/registromascota/registromascota.component';
+import { DashboardrecepcionistaComponent } from './components/dashboardrecepcionista/dashboardrecepcionista.component';
+import { RoleSelectorComponent } from './components/login/role-selector/role-selector.component';
+import { ProductosComponent } from './components/dashboard/productos/productos.component';
+import { RegistroproductoComponent } from './components/dashboard/productos/registroproducto/registroproducto.component';
+import { DashboardveterinarioComponent } from './components/dashboardveterinario/dashboardveterinario.component';
+import { MedicoveterinarioComponent } from './components/dashboard/medicoveterinario/medicoveterinario.component';
+import { RegistromedicoComponent } from './components/dashboard/medicoveterinario/registromedico/registromedico.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +35,18 @@ import { NavbarAdministradorComponent } from './components/navbar/navbar-adminis
     FuncionalidadesComponent,
     LoginComponent,
     NavbarAdministradorComponent,
+    ClientesComponent,
+    InicioDashboardComponent,
+    UpdateclienteComponent,
+    MascotasComponent,
+    RegistromascotaComponent,
+    DashboardrecepcionistaComponent,
+    RoleSelectorComponent,
+    ProductosComponent,
+    RegistroproductoComponent,
+    DashboardveterinarioComponent,
+    MedicoveterinarioComponent,
+    RegistromedicoComponent,
   ],
   imports: [
     BrowserModule,

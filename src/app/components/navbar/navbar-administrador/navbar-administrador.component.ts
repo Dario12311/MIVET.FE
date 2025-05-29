@@ -5,12 +5,13 @@ import { TokenService } from '../../../services/token.service';
 @Component({
   selector: 'app-navbar-administrador',
   templateUrl: './navbar-administrador.component.html',
-  styleUrls: ['./navbar-administrador.component.css']
+  styleUrls: ['./navbar-administrador.component.css'],
+  standalone: false,
 })
 export class NavbarAdministradorComponent implements OnInit {
   scrolled = false;
   menuVisible = false;
-  nombreUsuario = '';
+  nombreUsuario: string | null = null ;
   avatarUrl = '';
 
   constructor(
@@ -19,8 +20,8 @@ export class NavbarAdministradorComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Aquí puedes obtener la información del usuario desde un servicio
-    this.nombreUsuario = 'Dr. Martínez'; // Ejemplo
+    // Obtener el nombre de usuario desde el TokenService
+    this.nombreUsuario = this.tokenService.getUserName() ;
     // this.avatarUrl = 'ruta-a-la-imagen'; // Si tienes una imagen de perfil
   }
 

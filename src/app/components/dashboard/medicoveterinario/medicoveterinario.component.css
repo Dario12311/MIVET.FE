@@ -1,0 +1,340 @@
+/* Estilos generales del contenedor */
+.container {
+    padding: 2rem;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    margin-bottom: 2rem;
+  }
+  
+  /* Título y cabecera */
+  h2 {
+    color: #333;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+    border-left: 4px solid #e5793b;
+    padding-left: 1rem;
+    display: flex;
+    align-items: center;
+  }
+  
+  .header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+  
+  .header-title {
+    flex: 1;
+  }
+  
+  .header-actions {
+    display: flex;
+    align-items: center;
+  }
+  
+  /* Estilos para la barra de búsqueda */
+  .search-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+  
+  .input-group {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    overflow: hidden;
+    flex: 1;
+    max-width: 500px;
+    margin-right: 1rem;
+  }
+  
+  .input-group .form-control {
+    border: 1px solid #e9ecef;
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    border-radius: 8px 0 0 8px;
+  }
+  
+  .input-group .btn {
+    background-color: #e5793b;
+    color: white;
+    border: none;
+    padding: 0 1.25rem;
+    border-radius: 0 8px 8px 0;
+    transition: all 0.2s ease;
+  }
+  
+  .input-group .btn:hover {
+    background-color: #d86a2e;
+  }
+  
+  .search-results {
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin-left: 1rem;
+  }
+  
+  /* Estilos para la tabla */
+  .table-container {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  }
+  
+  .table-responsive {
+    margin-top: 0;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  
+  .table {
+    margin-bottom: 0;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+  
+  .table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #495057;
+    border-bottom: 2px solid #e9ecef;
+    padding: 1rem;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+  }
+  
+  .table td {
+    padding: 1rem;
+    vertical-align: middle;
+    border-top: 1px solid #f1f1f1;
+  }
+  
+  .table tr:hover {
+    background-color: #f9f9f9;
+  }
+  
+  /* Estilos para los badges de estado */
+  .badge {
+    padding: 0.5rem 0.75rem;
+    font-weight: 500;
+    border-radius: 6px;
+    font-size: 0.8rem;
+  }
+  
+  .bg-success {
+    background-color: #e6f7ed !important;
+    color: #0d8a45 !important;
+  }
+  
+  .bg-secondary {
+    background-color: #f0f0f0 !important;
+    color: #6c757d !important;
+  }
+  
+  /* Estilos para los botones */
+  .btn-primary {
+    background-color: #e5793b;
+    border-color: #e5793b;
+    padding: 0.6rem 1.25rem;
+    font-weight: 500;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+  }
+  
+  .btn-primary:hover {
+    background-color: #d86a2e;
+    border-color: #d86a2e;
+  }
+  
+  .btn-warning {
+    background-color: #ffa502;
+    border-color: #ffa502;
+    color: white;
+    border-radius: 6px;
+  }
+  
+  .btn-warning:hover {
+    background-color: #e69400;
+    border-color: #e69400;
+    color: white;
+  }
+  
+  .btn-danger {
+    background-color: #ff4757;
+    border-color: #ff4757;
+    border-radius: 6px;
+  }
+  
+  .btn-danger:hover {
+    background-color: #e8384a;
+    border-color: #e8384a;
+  }
+  
+  .btn-sm {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.85rem;
+  }
+  
+  .btn-group {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  /* Estilos para la paginación */
+  .pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+    padding: 1rem 0;
+    border-top: 1px solid #e9ecef;
+  }
+  
+  .pagination {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .page-item {
+    margin: 0;
+    align-items: center;
+  }
+  
+  .page-item .page-link {
+    color: #e5793b;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    padding: 0.5rem 0.75rem;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 40px;
+  }
+  
+  .page-item.active .page-link {
+    background-color: #e5793b;
+    border-color: #e5793b;
+    color: white;
+  }
+  
+  .page-item .page-link:hover:not(.disabled) {
+    background-color: #f8f9fa;
+    border-color: #e5793b;
+  }
+  
+  .page-item.disabled .page-link {
+    color: #6c757d;
+    background-color: #fff;
+    border-color: #dee2e6;
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+  
+  /* Estilos para el spinner de carga */
+  .spinner-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 0;
+  }
+  
+  .spinner-border {
+    color: #e5793b;
+    width: 3rem;
+    height: 3rem;
+    margin-bottom: 1rem;
+  }
+  
+  /* Estilos responsivos */
+  @media (max-width: 992px) {
+    .container {
+      padding: 1.5rem;
+    }
+  
+    .header-container {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .header-actions {
+      margin-top: 1rem;
+      width: 100%;
+    }
+  
+    .search-container {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .input-group {
+      width: 100%;
+      max-width: 100%;
+      margin-right: 0;
+      margin-bottom: 1rem;
+    }
+  
+    .search-results {
+      margin-left: 0;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .table-responsive {
+      border: none;
+    }
+  
+    .table thead {
+      display: none;
+    }
+  
+    .table,
+    .table tbody,
+    .table tr,
+    .table td {
+      display: block;
+      width: 100%;
+    }
+  
+    .table tr {
+      margin-bottom: 1rem;
+      border: 1px solid #e9ecef;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+  
+    .table td {
+      display: flex;
+      justify-content: space-between;
+      text-align: right;
+      padding: 0.75rem 1rem;
+      border-top: none;
+      border-bottom: 1px solid #f1f1f1;
+    }
+  
+    .table td:last-child {
+      border-bottom: none;
+    }
+  
+    .table td::before {
+      content: attr(data-label);
+      font-weight: 600;
+      text-align: left;
+      color: #495057;
+    }
+  
+    .btn-group {
+      justify-content: flex-end;
+    }
+  }
+  

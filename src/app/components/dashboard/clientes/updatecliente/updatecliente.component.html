@@ -1,0 +1,243 @@
+<div class="edit-client-container">
+    <div class="page-header">
+      <div class="header-content">
+        <button class="back-btn" (click)="volver()">
+          <i class="fas fa-arrow-left"></i>
+        </button>
+        <div class="header-text">
+          <h1>{{ modoEdicion ? 'Editar Cliente' : 'Registrar Nuevo Cliente' }}</h1>
+          <p>{{ modoEdicion ? 'Modifica la información del cliente' : 'Ingresa la información del nuevo cliente' }}</p>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Indicador de carga -->
+    <div *ngIf="cargando" class="loading-container">
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+      <p>Cargando datos del cliente...</p>
+    </div>
+  
+    <!-- Formulario -->
+    <div *ngIf="!cargando" class="form-container">
+      <form [formGroup]="clienteForm" (ngSubmit)="guardarCambios()">
+        
+        <!-- Información Personal -->
+        <div class="form-section">
+          <div class="section-header">
+            <i class="fas fa-user"></i>
+            <h2>Información Personal</h2>
+          </div>
+          
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="tipoDocumento">Tipo de Documento *</label>
+              <select id="tipoDocumento" class="form-control" formControlName="idTipoDocumento">
+                <option value="1">Cédula de Ciudadanía</option>
+                <option value="2">Cédula de Extranjería</option>
+                <option value="3">Pasaporte</option>
+                <option value="4">Tarjeta de Identidad</option>
+              </select>
+            </div>
+  
+            <div class="form-group">
+              <label for="numeroDocumento">Número de Documento *</label>
+              <input 
+                type="text" 
+                id="numeroDocumento" 
+                class="form-control" 
+                formControlName="numeroDocumento"
+                [class.is-invalid]="clienteForm.get('numeroDocumento')?.invalid && clienteForm.get('numeroDocumento')?.touched"
+                [attr.readonly]="modoEdicion ? true : null">
+              <div class="invalid-feedback" *ngIf="clienteForm.get('numeroDocumento')?.invalid && clienteForm.get('numeroDocumento')?.touched">
+                El número de documento es requerido
+              </div>
+              <small *ngIf="modoEdicion" class="form-text text-muted">El número de documento no puede ser modificado</small>
+            </div>
+  
+            <div class="form-group">
+              <label for="primerNombre">Primer Nombre *</label>
+              <input 
+                type="text" 
+                id="primerNombre" 
+                class="form-control" 
+                formControlName="primerNombre"
+                [class.is-invalid]="clienteForm.get('primerNombre')?.invalid && clienteForm.get('primerNombre')?.touched">
+              <div class="invalid-feedback" *ngIf="clienteForm.get('primerNombre')?.invalid && clienteForm.get('primerNombre')?.touched">
+                El primer nombre es requerido
+              </div>
+            </div>
+  
+            <div class="form-group">
+              <label for="segundoNombre">Segundo Nombre</label>
+              <input type="text" id="segundoNombre" class="form-control" formControlName="segundoNombre">
+            </div>
+  
+            <div class="form-group">
+              <label for="primerApellido">Primer Apellido *</label>
+              <input 
+                type="text" 
+                id="primerApellido" 
+                class="form-control" 
+                formControlName="primerApellido"
+                [class.is-invalid]="clienteForm.get('primerApellido')?.invalid && clienteForm.get('primerApellido')?.touched">
+              <div class="invalid-feedback" *ngIf="clienteForm.get('primerApellido')?.invalid && clienteForm.get('primerApellido')?.touched">
+                El primer apellido es requerido
+              </div>
+            </div>
+  
+            <div class="form-group">
+              <label for="segundoApellido">Segundo Apellido</label>
+              <input type="text" id="segundoApellido" class="form-control" formControlName="segundoApellido">
+            </div>
+  
+            <div class="form-group">
+              <label for="genero">Género</label>
+              <select id="genero" class="form-control" formControlName="genero">
+                <option value="">Seleccionar...</option>
+                <option value="M">Masculino</option>
+                <option value="F">Femenino</option>
+                <option value="O">Otro</option>
+              </select>
+            </div>
+  
+            <div class="form-group">
+              <label for="fechaNacimiento">Fecha de Nacimiento</label>
+              <input type="date" id="fechaNacimiento" class="form-control" formControlName="fechaNacimiento">
+            </div>
+          </div>
+        </div>
+  
+        <!-- Información de Contacto -->
+        <div class="form-section">
+          <div class="section-header">
+            <i class="fas fa-phone"></i>
+            <h2>Información de Contacto</h2>
+          </div>
+          
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="correoElectronico">Correo Electrónico *</label>
+              <input 
+                type="email" 
+                id="correoElectronico" 
+                class="form-control" 
+                formControlName="correoElectronico"
+                [class.is-invalid]="clienteForm.get('correoElectronico')?.invalid && clienteForm.get('correoElectronico')?.touched">
+              <div class="invalid-feedback" *ngIf="clienteForm.get('correoElectronico')?.invalid && clienteForm.get('correoElectronico')?.touched">
+                Ingrese un correo electrónico válido
+              </div>
+            </div>
+  
+            <div class="form-group">
+              <label for="telefono">Teléfono</label>
+              <input type="tel" id="telefono" class="form-control" formControlName="telefono">
+            </div>
+  
+            <div class="form-group">
+              <label for="celular">Celular *</label>
+              <input 
+                type="tel" 
+                id="celular" 
+                class="form-control" 
+                formControlName="celular"
+                [class.is-invalid]="clienteForm.get('celular')?.invalid && clienteForm.get('celular')?.touched">
+              <div class="invalid-feedback" *ngIf="clienteForm.get('celular')?.invalid && clienteForm.get('celular')?.touched">
+                El número de celular es requerido
+              </div>
+            </div>
+  
+            <div class="form-group">
+              <label for="estadoCivil">Estado Civil</label>
+              <select id="estadoCivil" class="form-control" formControlName="estadoCivil">
+                <option value="">Seleccionar...</option>
+                <option value="Soltero">Soltero(a)</option>
+                <option value="Casado">Casado(a)</option>
+                <option value="Divorciado">Divorciado(a)</option>
+                <option value="Viudo">Viudo(a)</option>
+                <option value="Union Libre">Unión Libre</option>
+              </select>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Información de Ubicación -->
+        <div class="form-section">
+          <div class="section-header">
+            <i class="fas fa-map-marker-alt"></i>
+            <h2>Información de Ubicación</h2>
+          </div>
+          
+          <div class="form-grid">
+            <div class="form-group full-width">
+              <label for="direccion">Dirección</label>
+              <input type="text" id="direccion" class="form-control" formControlName="direccion">
+            </div>
+  
+            <div class="form-group">
+              <label for="ciudad">Ciudad</label>
+              <input type="text" id="ciudad" class="form-control" formControlName="ciudad">
+            </div>
+  
+            <div class="form-group">
+              <label for="departamento">Departamento</label>
+              <input type="text" id="departamento" class="form-control" formControlName="departamento">
+            </div>
+  
+            <div class="form-group">
+              <label for="pais">País</label>
+              <input type="text" id="pais" class="form-control" formControlName="pais">
+            </div>
+  
+            <div class="form-group">
+              <label for="codigoPostal">Código Postal</label>
+              <input type="text" id="codigoPostal" class="form-control" formControlName="codigoPostal">
+            </div>
+          </div>
+        </div>
+  
+        <!-- Información Adicional -->
+        <div class="form-section">
+          <div class="section-header">
+            <i class="fas fa-info-circle"></i>
+            <h2>Información Adicional</h2>
+          </div>
+          
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="lugarNacimiento">Lugar de Nacimiento</label>
+              <input type="text" id="lugarNacimiento" class="form-control" formControlName="lugarNacimiento">
+            </div>
+  
+            <div class="form-group">
+              <label for="nacionalidad">Nacionalidad</label>
+              <input type="text" id="nacionalidad" class="form-control" formControlName="nacionalidad">
+            </div>
+  
+            <div class="form-group">
+              <label for="estado">Estado</label>
+              <select id="estado" class="form-control" formControlName="estado">
+                <option value="A">Activo</option>
+                <option value="I">Inactivo</option>
+              </select>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Botones de acción -->
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" (click)="volver()">
+            <i class="fas fa-times"></i>
+            Cancelar
+          </button>
+          <button type="submit" class="btn btn-primary" [disabled]="clienteForm.invalid || guardando">
+            <i class="fas fa-save"></i>
+            <span *ngIf="!guardando">Guardar Cambios</span>
+            <span *ngIf="guardando">Guardando...</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  

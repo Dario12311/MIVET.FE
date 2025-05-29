@@ -8,7 +8,8 @@ import { RegistroService, RegistroResponse } from '../../services/registro.servi
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
+  standalone: false,
 })
 
 export class LoginComponent {
@@ -262,18 +263,23 @@ export class LoginComponent {
       return;
     }
     
+    // Si el usuario tiene más de un rol, mostrar la pantalla de selección
+    if (roles.length > 1) {
+      this.router.navigate(['/role-selector']);
+      return;
+    }
+    
+    // Si solo tiene un rol, redirigir directamente
     if (roles.includes('ADMINISTRADOR')) {
-      this.router.navigate(['/dashboard/admin']);
+      localStorage.setItem('selectedRole', 'ADMINISTRADOR');
+      this.router.navigate(['/dashboard']);
+    } else if (roles.includes('RECEPCIONISTA')) {
+      localStorage.setItem('selectedRole', 'RECEPCIONISTA');
+      this.router.navigate(['/dashboard-recepcionista']);
+    }else if (roles.includes('VETERINARIO')) {
+      localStorage.setItem('selectedRole', 'VETERINARIO');
+      this.router.navigate(['/dashboard-veterinario']);
     }
-
-    else if (roles.includes('VETERINARIO')) {
-      this.router.navigate(['/dashboard/veterinario']);
-    }
-
-    else if (roles.includes('CLIENTE')) {
-      this.router.navigate(['/dashboard/cliente']);
-    }
-
     else {
       this.router.navigate(['/Inicio']);
     }

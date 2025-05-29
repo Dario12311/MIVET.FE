@@ -1,0 +1,119 @@
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h2 *ngIf="!clienteNumeroDocumento">Mascotas Registradas</h2>
+            <h2 *ngIf="clienteNumeroDocumento">Mascotas de {{nombreCliente}}</h2>
+        </div>
+        <div class="col-auto" *ngIf="clienteNumeroDocumento">
+            <button class="btn btn-secondary" (click)="volverAClientes()">
+                <i class="fas fa-arrow-left me-2"></i>Volver a Clientes
+            </button>
+        </div>
+    </div>
+
+    <!-- Indicador de carga -->
+    <div *ngIf="cargando" class="text-center mb-4">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Cargando...</span>
+        </div>
+        <p>Cargando mascotas...</p>
+    </div>
+
+    <!-- Barra de búsqueda -->
+    <div class="row mb-4" *ngIf="!cargando">
+        <div class="col-md-6">
+            <div class="input-group">
+                <input 
+                    type="text" 
+                    class="form-control" 
+                    placeholder="Buscar por nombre, especie, raza..." 
+                    [(ngModel)]="searchTerm"
+                    (input)="filtrarMascotas()">
+                <button class="btn btn-outline-secondary" type="button" (click)="filtrarMascotas()">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+        <div class="col-md-6 text-end">
+            <button class="btn btn-primary" (click)="agregarMascota()">
+                <i class="fas fa-plus me-2"></i>Nueva Mascota
+            </button>
+        </div>
+    </div>
+
+    <!-- Mensaje cuando no hay mascotas -->
+    <div *ngIf="!cargando && mascotasFiltradas.length === 0" class="alert alert-info">
+        <p *ngIf="!clienteNumeroDocumento" class="mb-0">No hay mascotas registradas en el sistema.</p>
+        <p *ngIf="clienteNumeroDocumento" class="mb-0">Este cliente no tiene mascotas registradas.</p>
+    </div>
+
+    <!-- Tabla de mascotas -->
+    <div class="table-responsive" *ngIf="!cargando && mascotasFiltradas.length > 0">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Especie</th>
+                    <th>Raza</th>
+                    <th>Edad</th>
+                    <th>Género</th>
+                    <th >Documento Dueño</th>
+                    <th>Nombre Dueño</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let mascota of mascotas">
+                    <td>{{ mascota.id }}</td>
+                    <td>{{ mascota.nombre }}</td>
+                    <td>{{ mascota.especie }}</td>
+                    <td>{{ mascota.raza }}</td>
+                    <td>{{ mascota.edad }}</td>
+                    <td>{{ mascota.genero }}</td>
+                    <td >{{ mascota.numeroDocumento }}</td>
+                    <td >{{ mascota.primerNombreDueno }} {{mascota.primerApellidoDueno}} {{mascota.segundoApellidoDueno}}</td>
+                    <td>
+                        <span class="badge" [ngClass]="{
+                            'bg-success': mascota.estado === 'A',
+                            'bg-danger': mascota.estado === 'I'
+                        }">
+                            {{ mascota.estado === 'A' ? 'Activo' : 'Inactivo' }}
+                        </span>
+                    </td>
+                    <td data-label ="Acciones">
+                        <div class="btn-group">
+                            <button class="btn btn-warning me-2" (click)="editarMascota(mascota)">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-danger" (click)="desactivarMascota(mascota.id)">
+                                <i class="fas fa-ban"></i> Desactivar
+                            </button>
+                        </div>
+                       
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Paginación -->
+        <nav aria-label="Page navigation" *ngIf="!cargando && totalPages > 1">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" [class.disabled]="currentPage === 1">
+                    <a class="page-link" (click)="cambiarPagina(currentPage - 1)" style="cursor: pointer;">
+                        <i class="fas fa-chevron-left"></i> Anterior
+                    </a>
+                </li>
+                <li class="page-item" *ngFor="let page of pages" [class.active]="page === currentPage">
+                    <a class="page-link" (click)="cambiarPagina(page)" style="cursor: pointer;">{{page}}</a>
+                </li>
+                <li class="page-item" [class.disabled]="currentPage === totalPages">
+                    <a class="page-link" (click)="cambiarPagina(currentPage + 1)" style="cursor: pointer;">
+                        Siguiente <i class="fas fa-chevron-right"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>

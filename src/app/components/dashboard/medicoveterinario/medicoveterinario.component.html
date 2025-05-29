@@ -1,0 +1,117 @@
+<div class="container mt-4">
+    <div class="header-container">
+        <div class="header-title">
+            <h2>Médicos Veterinarios Registrados</h2>
+            <p class="text-muted" *ngIf="!cargando">Gestiona la información de los médicos veterinarios</p>
+        </div>
+    </div>
+
+    <!-- Indicador de carga -->
+    <div *ngIf="cargando" class="spinner-container">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Cargando...</span>
+        </div>
+        <p>Cargando médicos veterinarios...</p>
+    </div>
+
+    <!-- Barra de búsqueda y botón de agregar -->
+    <div class="search-container" *ngIf="!cargando">
+        <div class="input-group">
+            <input 
+                type="text" 
+                class="form-control" 
+                placeholder="Buscar por nombre, documento, especialidad o correo..." 
+                [(ngModel)]="searchTerm"
+                (input)="filtrarMedicos()">
+            <button class="btn" type="button" (click)="filtrarMedicos()">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+        <span class="search-results" *ngIf="medicosFiltrados.length > 0">
+            {{ medicosFiltrados.length }} veterinario(s) encontrado(s)
+        </span>
+        <div class="ms-auto">
+            <button class="btn btn-primary" (click)="agregarMedico()">
+                <i class="fas fa-plus me-2"></i> Agregar Médico
+            </button>
+        </div>
+    </div>
+
+    <!-- Tabla de médicos -->
+    <div class="table-container" *ngIf="!cargando">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Documento</th>
+                        <th>Especialidad</th>
+                        <th>Teléfono</th>
+                        <th>Correo</th>
+                        <th>Universidad</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let medico of medicos" [class.table-secondary]="!estaActivo(medico.estado)">
+                        <td data-label="Nombre">{{medico.nombre}}</td>
+                        <td data-label="Documento">{{medico.numeroDocumento}}</td>
+                        <td data-label="Especialidad">{{medico.especialidad}}</td>
+                        <td data-label="Teléfono">{{medico.telefono}}</td>
+                        <td data-label="Correo">{{medico.correoElectronico}}</td>
+                        <td data-label="Universidad">{{medico.universidadGraduacion}}</td>
+                        <td data-label="Estado">
+                            <span class="badge" 
+                                  [class.bg-success]="estaActivo(medico.estado)"
+                                  [class.bg-secondary]="!estaActivo(medico.estado)">
+                                {{estaActivo(medico.estado) ? 'Activo' : 'Inactivo'}}
+                            </span>
+                        </td>
+                        <td data-label="Acciones">
+                            <div class="btn-group">
+                                <button class="btn btn-warning btn-sm" 
+                                        (click)="editarMedico(medico.numeroDocumento)"
+                                        title="Editar médico">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-danger btn-sm" 
+                                        (click)="desactivarMedico(medico.numeroDocumento)"
+                                        title="Desactivar médico">
+                                    <i class="fas fa-ban"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Mensaje cuando no hay médicos -->
+            <div *ngIf="medicos.length === 0" class="text-center py-5">
+                <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                <p class="text-muted">No se encontraron médicos veterinarios.</p>
+            </div>
+        </div>
+
+        <!-- Paginación -->
+        <div class="pagination-container" *ngIf="!cargando && totalPages > 1">
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    <li class="page-item" [class.disabled]="currentPage === 1">
+                        <a class="page-link" (click)="cambiarPagina(currentPage - 1)" style="cursor: pointer;">
+                            <i class="fas fa-chevron-left"></i>
+                        </a>
+                    </li>
+                    <li class="page-item" *ngFor="let page of pages" [class.active]="page === currentPage">
+                        <a class="page-link" (click)="cambiarPagina(page)" style="cursor: pointer;">{{page}}</a>
+                    </li>
+                    <li class="page-item" [class.disabled]="currentPage === totalPages">
+                        <a class="page-link" (click)="cambiarPagina(currentPage + 1)" style="cursor: pointer;">
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>

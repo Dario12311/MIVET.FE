@@ -32,9 +32,21 @@ export class RoleGuard implements CanActivate {
 
     // Verificar si el usuario tiene alguno de los roles permitidos
     if (!this.tokenService.hasAnyRole(allowedRoles)) {
-      // Redirigir según el rol del usuario
-      const userRole = this.tokenService.getUserRole();
-      this.redirectBasedOnRole(userRole ? userRole[0] : null);
+      // Si el usuario tiene múltiples roles pero no el requerido para esta ruta
+      const userRoles = this.tokenService.getUserRole();
+      if (userRoles && userRoles.length > 1) {
+        this.router.navigate(['/role-selector']);
+      } else {
+        // Redirigir según el rol del usuario
+        this.redirectBasedOnRole(userRoles ? userRoles[0] : null);
+      }
+      return false;
+    }
+
+    // Verificar si el rol seleccionado coincide con la ruta
+    const selectedRole = localStorage.getItem('selectedRole');
+    if (selectedRole && !allowedRoles.includes(selectedRole)) {
+      this.router.navigate(['/role-selector']);
       return false;
     }
 
@@ -50,13 +62,10 @@ export class RoleGuard implements CanActivate {
     
     switch (role) {
       case 'ADMINISTRADOR':
-        this.router.navigate(['/dashboard/admin']);
+        this.router.navigate(['/dashboard']);
         break;
-      case 'VETERINARIO':
-        this.router.navigate(['/dashboard/veterinario']);
-        break;
-      case 'CLIENTE':
-        this.router.navigate(['/dashboard/cliente']);
+      case 'RECEPCIONISTA':
+        this.router.navigate(['/dashboard-recepcionista']);
         break;
       default:
         console.log('Rol no reconocido, redirigiendo a Inicio');

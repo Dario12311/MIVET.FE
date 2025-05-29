@@ -1,0 +1,200 @@
+<div class="container mt-4">
+    <div class="header-container">
+        <div class="header-title">
+            <h2>{{ modoEdicion ? 'Editar' : 'Registrar' }} Médico Veterinario</h2>
+            <p class="text-muted" *ngIf="!cargando">
+                {{ modoEdicion ? 'Actualiza la información del médico veterinario' : 'Completa la información del nuevo médico veterinario' }}
+            </p>
+        </div>
+        <div class="header-actions">
+            <button class="btn btn-secondary" (click)="cancelar()">
+                <i class="fas fa-arrow-left me-2"></i>Volver
+            </button>
+        </div>
+    </div>
+
+    <!-- Indicador de carga -->
+    <div *ngIf="cargando" class="spinner-container">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Cargando...</span>
+        </div>
+        <p>Cargando datos del médico...</p>
+    </div>
+
+    <!-- Formulario -->
+    <form [formGroup]="medicoForm" (ngSubmit)="guardarMedico()" *ngIf="!cargando">
+        <!-- Información Personal -->
+        <div class="form-section">
+            <h3 class="section-title">
+                <i class="fas fa-user"></i>
+                Información Personal
+            </h3>
+            
+            <!-- Nombre completo - ancho completo -->
+            <div class="form-grid-full">
+                <div class="form-grid-item">
+                    <label for="nombre" class="form-label">Nombre Completo*</label>
+                    <input type="text" class="form-control" id="nombre" formControlName="nombre"
+                        [class.is-invalid]="nombreInvalido" placeholder="Ingrese el nombre completo">
+                    <div class="invalid-feedback" *ngIf="nombreInvalido">
+                        El nombre es requerido y debe tener máximo 100 caracteres.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tipo y número de documento - dos columnas -->
+            <div class="form-grid">
+                <div class="form-grid-item">
+                    <label for="tipoDocumentoId" class="form-label">Tipo de Documento*</label>
+                    <select class="form-select" id="tipoDocumentoId" formControlName="tipoDocumentoId">
+                        <option [ngValue]="null">Seleccione...</option>
+                        <option *ngFor="let tipo of tiposDocumento" [value]="tipo.id">{{tipo.nombre}}</option>
+                    </select>
+                </div>
+                <div class="form-grid-item">
+                    <label for="numeroDocumento" class="form-label">Número de Documento*</label>
+                    <input type="text" class="form-control" id="numeroDocumento" formControlName="numeroDocumento"
+                        [class.is-invalid]="documentoInvalido" placeholder="Número de documento">
+                    <div class="invalid-feedback" *ngIf="documentoInvalido">
+                        El número de documento es requerido.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fecha de nacimiento y género - dos columnas -->
+            <div class="form-grid">
+                <div class="form-grid-item">
+                    <label for="fechaNacimiento" class="form-label">Fecha de Nacimiento*</label>
+                    <input type="date" class="form-control" id="fechaNacimiento" formControlName="fechaNacimiento">
+                </div>
+                <div class="form-grid-item">
+                    <label for="genero" class="form-label">Género*</label>
+                    <select class="form-select" id="genero" formControlName="genero">
+                        <option [ngValue]="null">Seleccione...</option>
+                        <option value="M">Masculino</option>
+                        <option value="F">Femenino</option>
+                        <option value="O">Otro</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Estado civil y nacionalidad - dos columnas -->
+            <div class="form-grid">
+                <div class="form-grid-item">
+                    <label for="estadoCivil" class="form-label">Estado Civil*</label>
+                    <select class="form-select" id="estadoCivil" formControlName="estadoCivil">
+                        <option [ngValue]="null">Seleccione...</option>
+                        <option *ngFor="let estado of estadosCiviles" [value]="estado.id">{{estado.nombre}}</option>
+                    </select>
+                </div>
+                <div class="form-grid-item">
+                    <label for="nacionalidad" class="form-label">Nacionalidad*</label>
+                    <input type="text" class="form-control" id="nacionalidad" formControlName="nacionalidad"
+                        placeholder="Nacionalidad">
+                </div>
+            </div>
+        </div>
+
+        <hr class="section-divider">
+
+        <!-- Información Profesional -->
+        <div class="form-section">
+            <h3 class="section-title">
+                <i class="fas fa-graduation-cap"></i>
+                Información Profesional
+            </h3>
+            
+            <!-- Especialidad - ancho completo -->
+            <div class="form-grid-full">
+                <div class="form-grid-item">
+                    <label for="especialidad" class="form-label">Especialidad*</label>
+                    <input type="text" class="form-control" id="especialidad" formControlName="especialidad"
+                        [class.is-invalid]="especialidadInvalida" placeholder="Especialidad veterinaria">
+                    <div class="invalid-feedback" *ngIf="especialidadInvalida">
+                        La especialidad es requerida.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Universidad y año de graduación - dos columnas -->
+            <div class="form-grid">
+                <div class="form-grid-item">
+                    <label for="universidadGraduacion" class="form-label">Universidad*</label>
+                    <input type="text" class="form-control" id="universidadGraduacion" formControlName="universidadGraduacion"
+                        placeholder="Universidad de graduación">
+                </div>
+                <div class="form-grid-item">
+                    <label for="añoGraduacion" class="form-label">Año de Graduación*</label>
+                    <input type="date" class="form-control" id="añoGraduacion" formControlName="añoGraduacion">
+                </div>
+            </div>
+
+            <!-- Estado del médico - ancho completo -->
+            <div class="form-grid-full">
+                <div class="form-grid-item">
+                    <label for="estado" class="form-label">Estado*</label>
+                    <select class="form-select" id="estado" formControlName="estado">
+                        <option value="A">Activo</option>
+                        <option value="I">Inactivo</option>
+                    </select>
+                    <div class="form-text">
+                        Seleccione el estado actual del médico veterinario
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="section-divider">
+
+        <!-- Información de Contacto -->
+        <div class="form-section">
+            <h3 class="section-title">
+                <i class="fas fa-address-card"></i>
+                Información de Contacto
+            </h3>
+            
+            <!-- Email y teléfono - dos columnas -->
+            <div class="form-grid">
+                <div class="form-grid-item">
+                    <label for="correoElectronico" class="form-label">Correo Electrónico*</label>
+                    <input type="email" class="form-control" id="correoElectronico" formControlName="correoElectronico"
+                        [class.is-invalid]="correoInvalido" placeholder="correo@ejemplo.com">
+                    <div class="invalid-feedback" *ngIf="correoInvalido">
+                        Ingrese un correo electrónico válido.
+                    </div>
+                </div>
+                <div class="form-grid-item">
+                    <label for="telefono" class="form-label">Teléfono*</label>
+                    <input type="tel" class="form-control" id="telefono" formControlName="telefono"
+                        placeholder="Número de teléfono">
+                </div>
+            </div>
+
+            <!-- Dirección y ciudad - dos columnas -->
+            <div class="form-grid">
+                <div class="form-grid-item">
+                    <label for="direccion" class="form-label">Dirección*</label>
+                    <input type="text" class="form-control" id="direccion" formControlName="direccion"
+                        placeholder="Dirección completa">
+                </div>
+                <div class="form-grid-item">
+                    <label for="ciudad" class="form-label">Ciudad*</label>
+                    <input type="text" class="form-control" id="ciudad" formControlName="ciudad"
+                        placeholder="Ciudad">
+                </div>
+            </div>
+        </div>
+
+        <!-- Botones de acción -->
+        <div class="action-buttons">
+            <button type="button" class="btn btn-secondary" (click)="cancelar()">
+                <i class="fas fa-times me-2"></i>Cancelar
+            </button>
+            <button type="submit" class="btn btn-primary" [disabled]="enviando">
+                <span *ngIf="enviando" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                <i *ngIf="!enviando" class="fas fa-save me-2"></i>
+                {{ modoEdicion ? 'Actualizar' : 'Registrar' }} Médico
+            </button>
+        </div>
+    </form>
+</div>

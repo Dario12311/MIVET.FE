@@ -12,31 +12,35 @@
     </div>
     
     <div class="sidebar-menu">
-      <a class="menu-item active" routerLink="/dashboard">
+      <a class="menu-item" [routerLink]="['/dashboard']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="{exact: true}">
         <i class="fas fa-home"></i>
         <span>Dashboard</span>
       </a>
-      <a class="menu-item" routerLink="/dashboard/mascotas">
+      <a class="menu-item" routerLink="/dashboard/mascotas" routerLinkActive="active">
         <i class="fas fa-paw"></i>
         <span>Mascotas</span>
       </a>
-      <a class="menu-item" routerLink="/dashboard/historial">
+      <a class="menu-item" routerLink="/dashboard/historial" routerLinkActive="active">
         <i class="fas fa-clipboard"></i>
         <span>Historial Clínico</span>
       </a>
-      <a class="menu-item" routerLink="/dashboard/pacientes">
+      <a class="menu-item" routerLink="/dashboard/medicoveterinario" routerLinkActive="active">
         <i class="fas fa-users"></i>
-        <span>Pacientes</span>
+        <span>Veterinarios</span>
       </a>
-      <a class="menu-item" routerLink="/dashboard/turnos">
+      <a class="menu-item" routerLink="/dashboard/clientes" routerLinkActive="active">
+        <i class="fas fa-users"></i>
+        <span>Clientes</span>
+      </a>
+      <a class="menu-item" routerLink="/dashboard/turnos" routerLinkActive="active">
         <i class="fas fa-clock"></i>
         <span>Turnos</span>
       </a>
-      <a class="menu-item" routerLink="/dashboard/productos">
+      <a class="menu-item" routerLink="/dashboard/productos" routerLinkActive="active">
         <i class="fas fa-box"></i>
         <span>Productos</span>
       </a>
-      <a class="menu-item" routerLink="/dashboard/facturacion">
+      <a class="menu-item" routerLink="/dashboard/facturacion" routerLinkActive="active">
         <i class="fas fa-file-invoice"></i>
         <span>Facturación</span>
       </a>
@@ -44,183 +48,7 @@
   </div>
 
   <div class="dashboard-main">
-    <div class="main-header">
-      <h1>Bienvenido, Dra. Gladys</h1>
-      <p>Clínica San Clara • 10:00 - 16:00</p>
-      
-      <div class="header-actions">
-        <button class="action-btn">
-          <i class="fas fa-bell"></i>
-          <span class="notification-badge">3</span>
-        </button>
-        <button class="action-btn">
-          <i class="fas fa-envelope"></i>
-          <span class="notification-badge">5</span>
-        </button>
-      </div>
-    </div>
-
-    <div class="stats-container">
-      <div class="stat-card primary">
-        <div class="stat-icon">
-          <i class="fas fa-calendar-check"></i>
-        </div>
-        <div class="stat-info">
-          <h3>40</h3>
-          <p>Turnos</p>
-          <div class="stat-trend up">
-            <i class="fas fa-arrow-up"></i>
-            <span>+15 vs ayer</span>
-          </div>
-        </div>
-      </div>
-      
-      <div class="stat-card success">
-        <div class="stat-icon">
-          <i class="fas fa-paw"></i>
-        </div>
-        <div class="stat-info">
-          <h3>14</h3>
-          <p>Mascotas</p>
-          <div class="stat-trend up">
-            <i class="fas fa-arrow-up"></i>
-            <span>+5 vs ayer</span>
-          </div>
-        </div>
-      </div>
-      
-      <div class="stat-card warning">
-        <div class="stat-icon">
-          <i class="fas fa-stethoscope"></i>
-        </div>
-        <div class="stat-info">
-          <h3>14</h3>
-          <p>Operaciones</p>
-          <div class="stat-trend up">
-            <i class="fas fa-arrow-up"></i>
-            <span>+6 vs ayer</span>
-          </div>
-        </div>
-      </div>
-      
-      <div class="stat-card info">
-        <div class="stat-icon">
-          <i class="fas fa-user-md"></i>
-        </div>
-        <div class="stat-info">
-          <h3>15</h3>
-          <p>Doctores</p>
-          <div class="stat-trend up">
-            <i class="fas fa-arrow-up"></i>
-            <span>+3 vs ayer</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="dashboard-grid">
-      <div class="grid-item appointments">
-        <div class="item-header">
-          <h2>Próximas Citas</h2>
-          <button class="view-all">Ver todas</button>
-        </div>
-        
-        <div class="appointment-list">
-          <div class="appointment-item">
-            <div class="appointment-time">
-              <span class="time">10:30</span>
-              <span class="date">Hoy</span>
-            </div>
-            <div class="appointment-details">
-              <h4>Luna (Gato)</h4>
-              <p>Control de rutina</p>
-            </div>
-            <div class="appointment-owner">
-              <span>Dueño: Carlos Pérez</span>
-            </div>
-          </div>
-          
-          <div class="appointment-item">
-            <div class="appointment-time">
-              <span class="time">11:45</span>
-              <span class="date">Hoy</span>
-            </div>
-            <div class="appointment-details">
-              <h4>Rocky (Perro)</h4>
-              <p>Vacunación</p>
-            </div>
-            <div class="appointment-owner">
-              <span>Dueño: María López</span>
-            </div>
-          </div>
-          
-          <div class="appointment-item">
-            <div class="appointment-time">
-              <span class="time">14:15</span>
-              <span class="date">Hoy</span>
-            </div>
-            <div class="appointment-details">
-              <h4>Pelusa (Conejo)</h4>
-              <p>Revisión dental</p>
-            </div>
-            <div class="appointment-owner">
-              <span>Dueño: Ana Gómez</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <div class="grid-item calendar">
-        <div class="item-header">
-          <h2>Calendario</h2>
-        </div>
-        <p-calendar 
-          [inline]="true"
-          [showWeek]="true"
-          [locale]="es"
-          [showOtherMonths]="false"
-          styleClass="custom-calendar">
-        </p-calendar>
-      </div>
-      
-      <div class="grid-item recent-activity">
-        <div class="item-header">
-          <h2>Actividad Reciente</h2>
-        </div>
-        
-        <div class="activity-list">
-          <div class="activity-item">
-            <div class="activity-icon">
-              <i class="fas fa-check-circle"></i>
-            </div>
-            <div class="activity-details">
-              <p>Consulta completada: <strong>Rocky</strong></p>
-              <span class="activity-time">Hace 35 minutos</span>
-            </div>
-          </div>
-          
-          <div class="activity-item">
-            <div class="activity-icon">
-              <i class="fas fa-plus-circle"></i>
-            </div>
-            <div class="activity-details">
-              <p>Nueva cita agendada: <strong>Luna</strong></p>
-              <span class="activity-time">Hace 1 hora</span>
-            </div>
-          </div>
-          
-          <div class="activity-item">
-            <div class="activity-icon">
-              <i class="fas fa-file-medical"></i>
-            </div>
-            <div class="activity-details">
-              <p>Historial actualizado: <strong>Pelusa</strong></p>
-              <span class="activity-time">Hace 2 horas</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <router-outlet></router-outlet>
   </div>
 </div>
   

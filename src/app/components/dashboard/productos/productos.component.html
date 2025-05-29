@@ -1,0 +1,135 @@
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h2>Productos Registrados</h2>
+            <p class="text-muted">Gestiona tu inventario de productos</p>
+        </div>
+    </div>
+
+    <!-- Indicador de carga -->
+    <div *ngIf="cargando" class="text-center mb-4">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Cargando...</span>
+        </div>
+        <p class="mt-3">Cargando productos...</p>
+    </div>
+
+    <!-- Barra de búsqueda -->
+    <div class="row mb-4" *ngIf="!cargando">
+        <div class="col-md-8">
+            <div class="search-container">
+                <input 
+                    type="text" 
+                    class="form-control search-input" 
+                    placeholder="Buscar por nombre, descripción o categoría..." 
+                    [(ngModel)]="searchTerm"
+                    (input)="filtrarProductos()">
+                <button class="btn search-btn" type="button" (click)="filtrarProductos()">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+        <div class="col-md-4 text-end">
+            <button class="btn btn-add" (click)="agregarProducto()">
+                <i class="fas fa-plus"></i> Agregar Producto
+            </button>
+        </div>
+    </div>
+
+    <!-- Grid de productos en tarjetas -->
+    <div *ngIf="!cargando">
+        <div *ngIf="productos.length === 0" class="no-products">
+            <div class="no-products-icon">
+                <i class="fas fa-search fa-3x"></i>
+            </div>
+            <h3>No se encontraron productos</h3>
+            <p>Intenta ajustar los filtros de búsqueda</p>
+        </div>
+
+        <div *ngIf="productos.length > 0" class="products-grid">
+            <div *ngFor="let producto of productos" class="product-card" [class.inactive-product]="!estaActivo(producto.estado)">
+                <div class="product-image-container">
+                    <img [src]="producto.imagenUrl || 'assets/Imagenes/producto-default.png'" 
+                         [alt]="producto.nombre" 
+                         class="product-image">
+                    <div class="product-badges">
+                        <span class="badge product-id">ID: {{producto.id}}</span>
+                        <span class="badge product-status" 
+                              [class.status-active]="estaActivo(producto.estado)"
+                              [class.status-inactive]="!estaActivo(producto.estado)">
+                            {{estaActivo(producto.estado) ? 'Activo' : 'Inactivo'}}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="product-content">
+                    <h3 class="product-title">{{producto.nombre}}</h3>
+                    <p class="product-description">{{producto.descripcion}}</p>
+
+                    <div class="product-details">
+                        <div class="detail-row">
+                            <span class="detail-label">Precio:</span>
+                            <span class="detail-value price">{{formatearPrecio(producto.precio)}}</span>
+                        </div>
+
+                        <div class="detail-row">
+                            <span class="detail-label">Stock:</span>
+                            <span class="detail-value stock" 
+                                  [class.stock-high]="producto.stock > 10"
+                                  [class.stock-medium]="producto.stock > 5 && producto.stock <= 10"
+                                  [class.stock-low]="producto.stock <= 5">
+                                {{producto.stock}} unidades
+                            </span>
+                        </div>
+
+                        <div class="detail-row">
+                            <span class="detail-label">Categoría:</span>
+                            <span class="badge category-badge">{{producto.categoria}}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-actions">
+                    <button class="btn btn-edit" 
+                            (click)="editarProducto(producto.id)"
+                            title="Editar producto">
+                        <i class="fas fa-edit"></i>
+                        Editar
+                    </button>
+
+                    <button class="btn btn-deactivate" 
+                            (click)="desactivarProducto(producto.id)"
+                            title="Desactivar producto">
+                        <i class="fas fa-ban"></i>
+                        Desactivar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Paginación -->
+    <nav aria-label="Page navigation" *ngIf="!cargando && totalPages > 1" class="pagination-container">
+        <ul class="pagination custom-pagination">
+            <li class="page-item" [class.disabled]="currentPage === 1">
+                <a class="page-link" (click)="cambiarPagina(currentPage - 1)" style="cursor: pointer;">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+            </li>
+            <li class="page-item" *ngFor="let page of pages" [class.active]="page === currentPage">
+                <a class="page-link" (click)="cambiarPagina(page)" style="cursor: pointer;">{{page}}</a>
+            </li>
+            <li class="page-item" [class.disabled]="currentPage === totalPages">
+                <a class="page-link" (click)="cambiarPagina(currentPage + 1)" style="cursor: pointer;">
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            </li>
+        </ul>
+
+        <div class="pagination-info">
+            Mostrando {{(currentPage - 1) * productosPorPagina + 1}} - 
+            {{Math.min(currentPage * productosPorPagina, productosFiltrados.length)}} de 
+            {{productosFiltrados.length}} productos
+        </div>
+    </nav>
+</div>

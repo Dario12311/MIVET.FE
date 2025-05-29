@@ -1,0 +1,148 @@
+<div class="edit-pet-container">
+  <div class="page-header">
+    <div class="header-content">
+      <button class="back-btn" (click)="volver()">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <div class="header-text">
+        <h1>{{ modoEdicion ? 'Editar Mascota' : 'Registrar Nueva Mascota' }}</h1>
+        <p>{{ modoEdicion ? 'Modifica la información de la mascota' : 'Ingresa la información de la nueva mascota' }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Indicador de carga -->
+  <div *ngIf="cargando" class="loading-container">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p>Cargando datos de la mascota...</p>
+  </div>
+
+  <!-- Formulario -->
+  <div *ngIf="!cargando" class="form-container">
+    <form [formGroup]="mascotaForm" (ngSubmit)="guardarCambios()">
+      
+      <!-- Información de la Mascota -->
+      <div class="form-section">
+        <div class="section-header">
+          <i class="fas fa-paw"></i>
+          <h2>Información de la Mascota</h2>
+        </div>
+        
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="nombre">Nombre *</label>
+            <input 
+              type="text" 
+              id="nombre" 
+              class="form-control" 
+              formControlName="nombre"
+              [class.is-invalid]="mascotaForm.get('nombre')?.invalid && mascotaForm.get('nombre')?.touched">
+            <div class="invalid-feedback" *ngIf="mascotaForm.get('nombre')?.invalid && mascotaForm.get('nombre')?.touched">
+              El nombre es requerido
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="especie">Especie *</label>
+            <select 
+              id="especie" 
+              class="form-control" 
+              formControlName="especie"
+              [class.is-invalid]="mascotaForm.get('especie')?.invalid && mascotaForm.get('especie')?.touched">
+              <option value="">Seleccionar...</option>
+              <option value="Perro">Perro</option>
+              <option value="Gato">Gato</option>
+              <option value="Ave">Ave</option>
+              <option value="Reptil">Reptil</option>
+              <option value="Otro">Otro</option>
+            </select>
+            <div class="invalid-feedback" *ngIf="mascotaForm.get('especie')?.invalid && mascotaForm.get('especie')?.touched">
+              La especie es requerida
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="raza">Raza *</label>
+            <input 
+              type="text" 
+              id="raza" 
+              class="form-control" 
+              formControlName="raza"
+              [class.is-invalid]="mascotaForm.get('raza')?.invalid && mascotaForm.get('raza')?.touched">
+            <div class="invalid-feedback" *ngIf="mascotaForm.get('raza')?.invalid && mascotaForm.get('raza')?.touched">
+              La raza es requerida
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="edad">Edad (años) *</label>
+            <input 
+              type="number" 
+              id="edad" 
+              class="form-control" 
+              formControlName="edad"
+              min="0"
+              [class.is-invalid]="mascotaForm.get('edad')?.invalid && mascotaForm.get('edad')?.touched">
+            <div class="invalid-feedback" *ngIf="mascotaForm.get('edad')?.invalid && mascotaForm.get('edad')?.touched">
+              La edad es requerida y debe ser un número válido
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="genero">Género *</label>
+            <select 
+              id="genero" 
+              class="form-control" 
+              formControlName="genero"
+              [class.is-invalid]="mascotaForm.get('genero')?.invalid && mascotaForm.get('genero')?.touched">
+              <option value="">Seleccionar...</option>
+              <option value="M">Macho</option>
+              <option value="F">Hembra</option>
+            </select>
+            <div class="invalid-feedback" *ngIf="mascotaForm.get('genero')?.invalid && mascotaForm.get('genero')?.touched">
+              El género es requerido
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="numeroDocumento">Documento del Dueño *</label>
+            <input 
+              type="text" 
+              id="numeroDocumento" 
+              class="form-control" 
+              formControlName="numeroDocumento"
+              [class.is-invalid]="mascotaForm.get('numeroDocumento')?.invalid && mascotaForm.get('numeroDocumento')?.touched">
+            <div class="invalid-feedback" *ngIf="mascotaForm.get('numeroDocumento')?.invalid && mascotaForm.get('numeroDocumento')?.touched">
+              El documento del dueño es requerido
+            </div>
+          </div>
+
+          <div class="form-group" *ngIf="modoEdicion">
+            <label for="estado">Estado</label>
+            <select id="estado" class="form-control" formControlName="estado">
+              <option value="A">Activo</option>
+              <option value="I">Inactivo</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botones de acción -->
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" (click)="volver()">
+          <i class="fas fa-times"></i> Cancelar
+        </button>
+        <button 
+          type="submit" 
+          class="btn btn-primary" 
+          [disabled]="mascotaForm.invalid || guardando">
+          <i class="fas fa-save"></i> 
+          <span *ngIf="!guardando">{{ modoEdicion ? 'Actualizar' : 'Registrar' }}</span>
+          <span *ngIf="guardando">Guardando...</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

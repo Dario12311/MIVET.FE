@@ -1,0 +1,147 @@
+<div class="stats-container">
+    <div class="stat-card primary">
+      <div class="stat-icon">
+        <i class="fas fa-calendar-check"></i>
+      </div>
+      <div class="stat-info">
+        <h3>40</h3>
+        <p>Turnos</p>
+        <div class="stat-trend up">
+          <i class="fas fa-arrow-up"></i>
+          <span>+15 vs ayer</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="stat-card success">
+      <div class="stat-icon">
+        <i class="fas fa-paw"></i>
+      </div>
+      <div class="stat-info">
+        <h3>{{ cantidadMascotas }}</h3>
+        <p>Mascotas</p>
+        <div class="stat-trend up">
+          <i class="fas fa-arrow-up"></i>
+          <span>+5 vs ayer</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="stat-card warning">
+      <div class="stat-icon">
+        <i class="fas fa-stethoscope"></i>
+      </div>
+      <div class="stat-info">
+        <h3>14</h3>
+        <p>Operaciones</p>
+        <div class="stat-trend up">
+          <i class="fas fa-arrow-up"></i>
+          <span>+3 vs ayer</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="stat-card info">
+      <div class="stat-icon">
+        <i class="fas fa-users"></i>
+      </div>
+      <div class="stat-info">
+        <h3>{{ cantidadClientes }}</h3>
+        <p>Clientes</p>
+        <div class="stat-trend up">
+          <i class="fas fa-arrow-up"></i>
+          <span>+2 vs ayer</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="dashboard-grid">
+    <!-- Próximos turnos -->
+    <div class="dashboard-card upcoming-appointments">
+      <div class="card-header">
+        <h3>Próximas Citas</h3>
+        <a href="#" class="view-all">Ver todas</a>
+      </div>
+      
+      <div class="appointment-list">
+        <div class="appointment-item" *ngFor="let cita of proximasCitas">
+          <div class="appointment-time">
+            <h4>{{cita.hora}}</h4>
+            <p>{{cita.dia}}</p>
+          </div>
+          <div class="appointment-info">
+            <h4>{{cita.mascota}} ({{cita.tipo}})</h4>
+            <p>{{cita.motivo}}</p>
+          </div>
+          <div class="appointment-owner">
+            <p>Dueño: {{cita.dueno}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Calendario -->
+    <div class="dashboard-card calendar">
+      <div class="card-header">
+        <h3>Calendario</h3>
+      </div>
+      
+      <div class="calendar-container">
+        <!-- Usar el componente p-calendar de PrimeNG -->
+        <p-calendar 
+          [(ngModel)]="fechaActual" 
+          [inline]="true" 
+          [locale]="es"
+          [showWeek]="true"
+          [showIcon]="true"
+          [monthNavigator]="true"
+          [yearNavigator]="true"
+          yearRange="2020:2030">
+        </p-calendar>
+      </div>
+    </div>
+    
+    <!-- Actividad reciente -->
+    <div class="dashboard-card recent-activity">
+      <div class="card-header">
+        <h3>Actividad Reciente</h3>
+        <a href="#" class="view-all">Ver todo</a>
+      </div>
+      
+      <div class="activity-list">
+        <div class="activity-item">
+          <div class="activity-icon">
+            <i class="fas fa-user-plus"></i>
+          </div>
+          <div class="activity-info">
+            <h4>Nuevo cliente registrado</h4>
+            <p>Juan Martínez ha registrado a su mascota Max</p>
+            <span class="activity-time">Hace 2 horas</span>
+          </div>
+        </div>
+        
+        <div class="activity-item">
+          <div class="activity-icon">
+            <i class="fas fa-calendar-check"></i>
+          </div>
+          <div class="activity-info">
+            <h4>Cita completada</h4>
+            <p>Consulta de rutina para Bella (Gato)</p>
+            <span class="activity-time">Hace 3 horas</span>
+          </div>
+        </div>
+        
+        <div class="activity-item">
+          <div class="activity-icon">
+            <i class="fas fa-prescription"></i>
+          </div>
+          <div class="activity-info">
+            <h4>Receta emitida</h4>
+            <p>Antibióticos para Toby (Perro)</p>
+            <span class="activity-time">Hace 5 horas</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

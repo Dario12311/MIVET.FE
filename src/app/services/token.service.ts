@@ -10,6 +10,7 @@ interface DecodedToken {
   
   // Claims personalizados según tu backend
   idUsuario: string;
+  nombreUsuario: string;
   roles?: string | string[];
 }
 
@@ -139,5 +140,14 @@ export class TokenService {
   getUserId(): string | null {
     const decoded = this.getDecodedToken();
     return decoded ? decoded.idUsuario : null;
+  }
+
+  /**
+   * Obtiene el nombre de usuario desde el token
+   * @returns Nombre de usuario o null si no hay token
+   */
+  getUserName(): string | null {
+    const decoded = this.getDecodedToken();
+    return decoded ? decoded.nombreUsuario : null;
   }
 }

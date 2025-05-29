@@ -1,0 +1,44 @@
+
+<div class="dashboard-container">
+  <div class="dashboard-sidebar">
+    <div class="sidebar-header">
+      <img src="assets/Imagenes/Logo.PNG" alt="Avatar" class="avatar" />
+      <div class="user-details">
+        <h3>{{ nombreUsuario }}</h3>
+        <p>Recepcionista</p>
+        <span class="status online">En línea</span>
+      </div>
+    </div>
+    
+    <div class="sidebar-menu">
+      <a class="menu-item" [routerLink]="['/dashboard-recepcionista']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="{exact: true}">
+        <i class="fas fa-home"></i>
+        <span>Inicio</span>
+      </a>
+      <a class="menu-item" routerLink="/dashboard-recepcionista/citas" routerLinkActive="active">
+        <i class="fas fa-calendar-alt"></i>
+        <span>Gestión de Citas</span>
+      </a>
+      <a class="menu-item" routerLink="/dashboard-recepcionista/clientes" routerLinkActive="active">
+        <i class="fas fa-users"></i>
+        <span>Clientes</span>
+      </a>
+      <a class="menu-item" routerLink="/dashboard-recepcionista/mascotas" routerLinkActive="active">
+        <i class="fas fa-paw"></i>
+        <span>Mascotas</span>
+      </a>
+      <a class="menu-item" routerLink="/dashboard-recepcionista/pagos" routerLinkActive="active">
+        <i class="fas fa-credit-card"></i>
+        <span>Pagos</span>
+      </a>
+      <a class="menu-item" routerLink="/dashboard-recepcionista/comunicaciones" routerLinkActive="active">
+        <i class="fas fa-comments"></i>
+        <span>Comunicaciones</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="dashboard-main">
+    <router-outlet></router-outlet>
+  </div>
+</div>
