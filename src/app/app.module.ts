@@ -25,6 +25,7 @@ import { RegistroproductoComponent } from './components/dashboard/productos/regi
 import { DashboardveterinarioComponent } from './components/dashboardveterinario/dashboardveterinario.component';
 import { MedicoveterinarioComponent } from './components/dashboard/medicoveterinario/medicoveterinario.component';
 import { RegistromedicoComponent } from './components/dashboard/medicoveterinario/registromedico/registromedico.component';
+import { DashboardClienteComponent } from './componenest/dashboard-cliente/dashboard-cliente.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { RegistromedicoComponent } from './components/dashboard/medicoveterinari
     DashboardveterinarioComponent,
     MedicoveterinarioComponent,
     RegistromedicoComponent,
+    DashboardClienteComponent,
   ],
   imports: [
     BrowserModule,

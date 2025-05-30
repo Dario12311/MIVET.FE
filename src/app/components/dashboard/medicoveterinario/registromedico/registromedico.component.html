@@ -22,7 +22,8 @@
     </div>
 
     <!-- Formulario -->
-    <form [formGroup]="medicoForm" (ngSubmit)="guardarMedico()" *ngIf="!cargando">
+    <!--[formGroup]="medicoForm" ese formGroup va dentor de la etiqueta form pero ahora me esta generando un error-->
+    <form  (ngSubmit)="guardarMedico()" *ngIf="!cargando">
         <!-- Información Personal -->
         <div class="form-section">
             <h3 class="section-title">
@@ -47,7 +48,7 @@
                 <div class="form-grid-item">
                     <label for="tipoDocumentoId" class="form-label">Tipo de Documento*</label>
                     <select class="form-select" id="tipoDocumentoId" formControlName="tipoDocumentoId">
-                        <option [ngValue]="null">Seleccione...</option>
+                       <!--<option [ngValue]="null">Seleccione...</option>-->
                         <option *ngFor="let tipo of tiposDocumento" [value]="tipo.id">{{tipo.nombre}}</option>
                     </select>
                 </div>
@@ -70,7 +71,7 @@
                 <div class="form-grid-item">
                     <label for="genero" class="form-label">Género*</label>
                     <select class="form-select" id="genero" formControlName="genero">
-                        <option [ngValue]="null">Seleccione...</option>
+                        <!--<option [ngValue]="null">Seleccione...</option>-->
                         <option value="M">Masculino</option>
                         <option value="F">Femenino</option>
                         <option value="O">Otro</option>
@@ -83,7 +84,7 @@
                 <div class="form-grid-item">
                     <label for="estadoCivil" class="form-label">Estado Civil*</label>
                     <select class="form-select" id="estadoCivil" formControlName="estadoCivil">
-                        <option [ngValue]="null">Seleccione...</option>
+                        <!--<option [ngValue]="null">Seleccione...</option>-->
                         <option *ngFor="let estado of estadosCiviles" [value]="estado.id">{{estado.nombre}}</option>
                     </select>
                 </div>
