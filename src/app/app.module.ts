@@ -25,7 +25,9 @@ import { RegistroproductoComponent } from './components/dashboard/productos/regi
 import { DashboardveterinarioComponent } from './components/dashboardveterinario/dashboardveterinario.component';
 import { MedicoveterinarioComponent } from './components/dashboard/medicoveterinario/medicoveterinario.component';
 import { RegistromedicoComponent } from './components/dashboard/medicoveterinario/registromedico/registromedico.component';
-import { DashboardClienteComponent } from './componenest/dashboard-cliente/dashboard-cliente.component';
+import { DashboardClienteComponent } from './components/dashboard-cliente/dashboard-cliente.component';
+import { RegistroHorarioComponent } from './components/dashboard/registro-horario/registro-horario.component';
+import { ListaHorariosComponent } from './components/dashboard/lista-horarios/lista-horarios.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +51,8 @@ import { DashboardClienteComponent } from './componenest/dashboard-cliente/dashb
     MedicoveterinarioComponent,
     RegistromedicoComponent,
     DashboardClienteComponent,
+    RegistroHorarioComponent,
+    ListaHorariosComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,228 @@
+<div class="edit-schedule-container">
+    <div class="page-header">
+      <div class="header-content">
+        <button class="back-btn" (click)="volver()">
+          <i class="fas fa-arrow-left"></i>
+        </button>
+        <div class="header-text">
+          <h1>{{ modoEdicion ? 'Editar Horario' : 'Registrar Nuevo Horario' }}</h1>
+          <p>{{ modoEdicion ? 'Modifica el horario del veterinario' : 'Configura el horario de atención del veterinario' }}</p>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Indicador de carga -->
+    <div *ngIf="cargando" class="loading-container">
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+      <p>Cargando datos del horario...</p>
+    </div>
+  
+    <!-- Formulario -->
+    <div *ngIf="!cargando" class="form-container">
+      <form [formGroup]="horarioForm" (ngSubmit)="guardarCambios()">
+        
+        <!-- Selección de Veterinario -->
+        <div class="form-section">
+          <div class="section-header">
+            <i class="fas fa-user-md"></i>
+            <h2>Veterinario</h2>
+          </div>
+          
+          <div class="veterinario-selection">
+            <div *ngIf="!medicoSeleccionado" class="no-veterinario">
+              <button type="button" class="btn btn-outline-primary" (click)="abrirModalMedicos()">
+                <i class="fas fa-search"></i> Seleccionar Veterinario
+              </button>
+              <div class="invalid-feedback" *ngIf="horarioForm.get('medicoVeterinarioNumeroDocumento')?.invalid && horarioForm.get('medicoVeterinarioNumeroDocumento')?.touched">
+                Debe seleccionar un veterinario
+              </div>
+            </div>
+            
+            <div *ngIf="medicoSeleccionado" class="veterinario-selected">
+              <div class="veterinario-card">
+                <div class="veterinario-info">
+                  <h4>{{ medicoSeleccionado.nombre }}</h4>
+                  <p><strong>Documento:</strong> {{ medicoSeleccionado.numeroDocumento }}</p>
+                  <p><strong>Especialidad:</strong> {{ medicoSeleccionado.especialidad }}</p>
+                  <p><strong>Teléfono:</strong> {{ medicoSeleccionado.telefono }}</p>
+                </div>
+                <button type="button" class="btn btn-sm btn-outline-danger" (click)="quitarMedicoSeleccionado()">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Configuración del Horario -->
+        <div class="form-section">
+          <div class="section-header">
+            <i class="fas fa-clock"></i>
+            <h2>Configuración del Horario</h2>
+          </div>
+          
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="diaSemana">Día de la Semana *</label>
+              <select 
+                id="diaSemana" 
+                class="form-control" 
+                formControlName="diaSemana"
+                [class.is-invalid]="horarioForm.get('diaSemana')?.invalid && horarioForm.get('diaSemana')?.touched">
+                <option value="">Seleccionar día...</option>
+                <option *ngFor="let dia of diasSemana" [value]="dia.valor">{{ dia.nombre }}</option>
+              </select>
+              <div class="invalid-feedback" *ngIf="horarioForm.get('diaSemana')?.invalid && horarioForm.get('diaSemana')?.touched">
+                El día de la semana es requerido
+              </div>
+            </div>
+  
+            <div class="form-group">
+              <label for="horaInicio">Hora de Inicio *</label>
+              <input 
+                type="time" 
+                id="horaInicio" 
+                class="form-control" 
+                formControlName="horaInicio"
+                [class.is-invalid]="horarioForm.get('horaInicio')?.invalid && horarioForm.get('horaInicio')?.touched">
+              <div class="invalid-feedback" *ngIf="horarioForm.get('horaInicio')?.invalid && horarioForm.get('horaInicio')?.touched">
+                <span *ngIf="horarioForm.get('horaInicio')?.errors?.['required']">La hora de inicio es requerida</span>
+                <span *ngIf="horarioForm.get('horaInicio')?.errors?.['formatoHoraInvalido']">Formato de hora inválido</span>
+              </div>
+            </div>
+  
+            <div class="form-group">
+              <label for="horaFin">Hora de Fin *</label>
+              <input 
+                type="time" 
+                id="horaFin" 
+                class="form-control" 
+                formControlName="horaFin"
+                [class.is-invalid]="horarioForm.get('horaFin')?.invalid && horarioForm.get('horaFin')?.touched">
+              <div class="invalid-feedback" *ngIf="horarioForm.get('horaFin')?.invalid && horarioForm.get('horaFin')?.touched">
+                <span *ngIf="horarioForm.get('horaFin')?.errors?.['required']">La hora de fin es requerida</span>
+                <span *ngIf="horarioForm.get('horaFin')?.errors?.['formatoHoraInvalido']">Formato de hora inválido</span>
+              </div>
+            </div>
+  
+            <!-- Error de rango de horas -->
+            <div class="form-group full-width" *ngIf="horarioForm.errors?.['rangoHorasInvalido'] && (horarioForm.get('horaInicio')?.touched || horarioForm.get('horaFin')?.touched)">
+              <div class="alert alert-danger">
+                <i class="fas fa-exclamation-triangle"></i>
+                La hora de fin debe ser posterior a la hora de inicio
+              </div>
+            </div>
+  
+            <div class="form-group full-width">
+              <label for="observaciones">Observaciones</label>
+              <textarea 
+                id="observaciones" 
+                class="form-control" 
+                formControlName="observaciones"
+                rows="3"
+                placeholder="Observaciones adicionales sobre el horario..."></textarea>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Fechas Específicas (Opcional) -->
+        <div class="form-section">
+          <div class="section-header">
+            <i class="fas fa-calendar-alt"></i>
+            <h2>Fechas Específicas (Opcional)</h2>
+          </div>
+          
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="fechaInicio">Fecha de Inicio</label>
+              <input 
+                type="date" 
+                id="fechaInicio" 
+                class="form-control" 
+                formControlName="fechaInicio">
+              <small class="form-text text-muted">Si se especifica, el horario solo será válido desde esta fecha</small>
+            </div>
+  
+            <div class="form-group">
+              <label for="fechaFin">Fecha de Fin</label>
+              <input 
+                type="date" 
+                id="fechaFin" 
+                class="form-control" 
+                formControlName="fechaFin">
+              <small class="form-text text-muted">Si se especifica, el horario solo será válido hasta esta fecha</small>
+            </div>
+  
+            <div class="form-group" *ngIf="modoEdicion">
+              <label for="esActivo">Estado</label>
+              <select id="esActivo" class="form-control" formControlName="esActivo">
+                <option [value]="true">Activo</option>
+                <option [value]="false">Inactivo</option>
+              </select>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Botones de acción -->
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" (click)="volver()">
+            <i class="fas fa-times"></i> Cancelar
+          </button>
+          <button 
+            type="submit" 
+            class="btn btn-primary" 
+            [disabled]="horarioForm.invalid || guardando">
+            <i class="fas fa-save"></i> 
+            <span *ngIf="!guardando">{{ modoEdicion ? 'Actualizar' : 'Registrar' }}</span>
+            <span *ngIf="guardando">Guardando...</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+  <!-- Modal de Selección de Médicos -->
+  <div class="modal-backdrop" *ngIf="mostrarModalMedicos" (click)="cerrarModalMedicos()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Seleccionar Veterinario</h3>
+        <button type="button" class="btn-close" (click)="cerrarModalMedicos()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      
+      <div class="modal-body">
+        <div *ngIf="cargandoMedicos" class="text-center p-4">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Cargando médicos...</span>
+          </div>
+          <p class="mt-2">Cargando veterinarios...</p>
+        </div>
+        
+        <div *ngIf="!cargandoMedicos && medicos.length === 0" class="text-center p-4">
+          <i class="fas fa-user-md fa-3x text-muted mb-3"></i>
+          <p>No hay veterinarios disponibles</p>
+        </div>
+        
+        <div *ngIf="!cargandoMedicos && medicos.length > 0" class="medicos-grid">
+          <div 
+            *ngFor="let medico of medicos" 
+            class="medico-card"
+            (click)="seleccionarMedico(medico)">
+            <div class="medico-info">
+              <h4>{{ medico.nombre }}</h4>
+              <p><strong>Documento:</strong> {{ medico.numeroDocumento }}</p>
+              <p><strong>Especialidad:</strong> {{ medico.especialidad }}</p>
+              <p><strong>Teléfono:</strong> {{ medico.telefono }}</p>
+              <p><strong>Email:</strong> {{ medico.correoElectronico }}</p>
+            </div>
+            <div class="medico-actions">
+              <i class="fas fa-check-circle"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

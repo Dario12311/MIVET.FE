@@ -17,6 +17,8 @@ import { RegistroproductoComponent } from './components/dashboard/productos/regi
 import { DashboardveterinarioComponent } from './components/dashboardveterinario/dashboardveterinario.component';
 import { MedicoveterinarioComponent } from './components/dashboard/medicoveterinario/medicoveterinario.component';
 import { RegistromedicoComponent } from './components/dashboard/medicoveterinario/registromedico/registromedico.component';
+import { ListaHorariosComponent } from './components/dashboard/lista-horarios/lista-horarios.component';
+import { RegistroHorarioComponent } from './components/dashboard/registro-horario/registro-horario.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'Inicio', pathMatch: 'full' },
@@ -39,6 +41,22 @@ const routes: Routes = [
       { path: 'medicoveterinario', component: MedicoveterinarioComponent },
       { path: 'nuevomedico', component: RegistromedicoComponent },
       { path: 'editar/medico/:id', component: RegistromedicoComponent },
+      {
+        path: 'horarios',
+        component: ListaHorariosComponent
+      },
+      {
+        path: 'horarios/nuevo',
+        component: RegistroHorarioComponent
+      },
+      {
+        path: 'horarios/editar/:id',
+        component: RegistroHorarioComponent
+      },
+      {
+        path: 'horarios/veterinario/:numeroDocumento',
+        component: ListaHorariosComponent
+      }
       
     ]
   },

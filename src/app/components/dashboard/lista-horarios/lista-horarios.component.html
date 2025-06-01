@@ -1,0 +1,181 @@
+<div class="horarios-container">
+    <!-- Header con título y botón añadir -->
+    <div class="page-header">
+      <div class="header-content">
+        <div class="header-text">
+          <h1><i class="fas fa-clock"></i> Gestión de Horarios</h1>
+          <p>Administra los horarios de atención de los veterinarios</p>
+        </div>
+        <button class="btn btn-primary btn-add" (click)="nuevoHorario()">
+          <i class="fas fa-plus"></i> Nuevo Horario
+        </button>
+      </div>
+    </div>
+  
+    <!-- Filtros -->
+    <div class="filters-section">
+      <div class="filters-container">
+        <div class="filter-group">
+          <label for="filtroVeterinario">Buscar Veterinario</label>
+          <input 
+            type="text" 
+            id="filtroVeterinario"
+            class="form-control"
+            [(ngModel)]="filtroVeterinario"
+            placeholder="Nombre o documento del veterinario...">
+        </div>
+  
+        <div class="filter-group">
+          <label for="filtroDia">Día de la Semana</label>
+          <select 
+            id="filtroDia" 
+            class="form-control"
+            [(ngModel)]="filtroDia">
+            <option [value]="null">Todos los días</option>
+            <option *ngFor="let dia of diasSemana" [value]="dia.valor">{{ dia.nombre }}</option>
+          </select>
+        </div>
+  
+        <div class="filter-group">
+          <label class="checkbox-label">
+            <input 
+              type="checkbox" 
+              [(ngModel)]="mostrarSoloActivos">
+            <span class="checkmark"></span>
+            Solo horarios activos
+          </label>
+        </div>
+  
+        <div class="filter-actions">
+          <button class="btn btn-secondary btn-sm" (click)="limpiarFiltros()">
+            <i class="fas fa-eraser"></i> Limpiar
+          </button>
+          <button class="btn btn-outline-primary btn-sm" (click)="cargarHorarios()">
+            <i class="fas fa-sync-alt"></i> Refrescar
+          </button>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Indicador de carga -->
+    <div *ngIf="cargando" class="loading-container">
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+      <p>Cargando horarios...</p>
+    </div>
+  
+    <!-- Lista de horarios -->
+    <div *ngIf="!cargando" class="horarios-content">
+      <!-- Mensaje cuando no hay resultados -->
+      <div *ngIf="horariosFiltrados.length === 0" class="empty-state">
+        <i class="fas fa-calendar-times fa-3x"></i>
+        <h3>No se encontraron horarios</h3>
+        <p *ngIf="filtroVeterinario || filtroDia !== null">
+          Intenta ajustar los filtros de búsqueda
+        </p>
+        <p *ngIf="!filtroVeterinario && filtroDia === null">
+          No hay horarios registrados en el sistema
+        </p>
+        <button class="btn btn-primary" (click)="nuevoHorario()">
+          <i class="fas fa-plus"></i> Crear Primer Horario
+        </button>
+      </div>
+  
+      <!-- Grid de horarios -->
+      <div *ngIf="horariosFiltrados.length > 0" class="horarios-grid">
+        <div 
+          *ngFor="let horario of horariosFiltrados" 
+          class="horario-card"
+          [class.inactive]="!horario.esActivo">
+          
+          <!-- Header de la tarjeta -->
+          <div class="card-header">
+            <div class="veterinario-info">
+              <h3>{{ horario.nombreVeterinario || 'Veterinario' }}</h3>
+              <span class="documento">Doc: {{ horario.medicoVeterinarioNumeroDocumento }}</span>
+            </div>
+            
+            <div class="status-badge" [class.active]="horario.esActivo" [class.inactive]="!horario.esActivo">
+              {{ horario.esActivo ? 'Activo' : 'Inactivo' }}
+            </div>
+          </div>
+  
+          <!-- Información del horario -->
+          <div class="card-body">
+            <div class="horario-info">
+              <div class="info-item">
+                <i class="fas fa-calendar-day"></i>
+                <span class="label">Día:</span>
+                <span class="value">{{ getNombreDia(horario.diaSemana) }}</span>
+              </div>
+              
+              <div class="info-item">
+                <i class="fas fa-clock"></i>
+                <span class="label">Horario:</span>
+                <span class="value">{{ formatearHora(horario.horaInicio) }} - {{ formatearHora(horario.horaFin) }}</span>
+              </div>
+              
+              <div class="info-item" *ngIf="horario.observaciones">
+                <i class="fas fa-sticky-note"></i>
+                <span class="label">Observaciones:</span>
+                <span class="value">{{ horario.observaciones }}</span>
+              </div>
+  
+              <div class="info-item" *ngIf="horario.fechaInicio || horario.fechaFin">
+                <i class="fas fa-calendar-alt"></i>
+                <span class="label">Vigencia:</span>
+                <span class="value">
+                  <span *ngIf="horario.fechaInicio">Desde {{ horario.fechaInicio | date:'short' }}</span>
+                  <span *ngIf="horario.fechaInicio && horario.fechaFin"> - </span>
+                  <span *ngIf="horario.fechaFin">Hasta {{ horario.fechaFin | date:'short' }}</span>
+                </span>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Acciones de la tarjeta -->
+          <div class="card-actions">
+            <button 
+              class="btn btn-sm btn-outline-primary"
+              (click)="verHorarios(horario.medicoVeterinarioNumeroDocumento)"
+              title="Ver todos los horarios de este veterinario">
+              <i class="fas fa-eye"></i>
+            </button>
+            
+            <button 
+              class="btn btn-sm btn-outline-secondary"
+              (click)="editarHorario(horario)"
+              title="Editar horario">
+              <i class="fas fa-edit"></i>
+            </button>
+            
+            <button 
+              class="btn btn-sm"
+              [class.btn-outline-success]="!horario.esActivo"
+              [class.btn-outline-warning]="horario.esActivo"
+              (click)="toggleEstadoHorario(horario)"
+              [title]="horario.esActivo ? 'Desactivar horario' : 'Activar horario'">
+              <i class="fas" [class.fa-play]="!horario.esActivo" [class.fa-pause]="horario.esActivo"></i>
+            </button>
+            
+            <button 
+              class="btn btn-sm btn-outline-danger"
+              (click)="eliminarHorario(horario)"
+              title="Eliminar horario">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Resumen de resultados -->
+      <div *ngIf="horariosFiltrados.length > 0" class="results-summary">
+        <p>
+          Mostrando {{ horariosFiltrados.length }} 
+          {{ horariosFiltrados.length === 1 ? 'horario' : 'horarios' }}
+          de {{ horarios.length }} total{{ horarios.length === 1 ? '' : 'es' }}
+        </p>
+      </div>
+    </div>
+  </div>
