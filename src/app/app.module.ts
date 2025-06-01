@@ -28,6 +28,9 @@ import { RegistromedicoComponent } from './components/dashboard/medicoveterinari
 import { DashboardClienteComponent } from './components/dashboard-cliente/dashboard-cliente.component';
 import { RegistroHorarioComponent } from './components/dashboard/registro-horario/registro-horario.component';
 import { ListaHorariosComponent } from './components/dashboard/lista-horarios/lista-horarios.component';
+import { AgendarCitaComponent } from './components/dashboard/agendar-cita/agendar-cita.component';
+import { ListaCitasComponent } from './components/dashboard/lista-citas/lista-citas.component';
+import { DetalleCitaComponent } from './components/dashboard/detalle-cita/detalle-cita.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +56,9 @@ import { ListaHorariosComponent } from './components/dashboard/lista-horarios/li
     DashboardClienteComponent,
     RegistroHorarioComponent,
     ListaHorariosComponent,
+    AgendarCitaComponent,
+    ListaCitasComponent,
+    DetalleCitaComponent,
   ],
   imports: [
     BrowserModule,

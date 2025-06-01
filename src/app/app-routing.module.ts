@@ -19,6 +19,9 @@ import { MedicoveterinarioComponent } from './components/dashboard/medicoveterin
 import { RegistromedicoComponent } from './components/dashboard/medicoveterinario/registromedico/registromedico.component';
 import { ListaHorariosComponent } from './components/dashboard/lista-horarios/lista-horarios.component';
 import { RegistroHorarioComponent } from './components/dashboard/registro-horario/registro-horario.component';
+import { AgendarCitaComponent } from './components/dashboard/agendar-cita/agendar-cita.component';
+import { ListaCitasComponent } from './components/dashboard/lista-citas/lista-citas.component';
+import { DetalleCitaComponent } from './components/dashboard/detalle-cita/detalle-cita.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'Inicio', pathMatch: 'full' },
@@ -35,9 +38,9 @@ const routes: Routes = [
       { path: 'mascotas/cliente/:numeroDocumento', component: MascotasComponent },
       { path: 'nuevamascota', component: RegistromascotaComponent },
       { path: 'editar/nuevamascota/:id', component: RegistromascotaComponent },
-      {path: 'productos', component: ProductosComponent},
-      {path: 'nuevoproducto', component: RegistroproductoComponent},
-      {path: 'editar/producto/:id', component: RegistroproductoComponent},
+      { path: 'productos', component: ProductosComponent },
+      { path: 'nuevoproducto', component: RegistroproductoComponent },
+      { path: 'editar/producto/:id', component: RegistroproductoComponent },
       { path: 'medicoveterinario', component: MedicoveterinarioComponent },
       { path: 'nuevomedico', component: RegistromedicoComponent },
       { path: 'editar/medico/:id', component: RegistromedicoComponent },
@@ -56,8 +59,36 @@ const routes: Routes = [
       {
         path: 'horarios/veterinario/:numeroDocumento',
         component: ListaHorariosComponent
+      },
+      // === NUEVAS RUTAS PARA CITAS ===
+      {
+        path: 'citas',
+        component: ListaCitasComponent
+      },
+      {
+        path: 'citas/nueva',
+        component: AgendarCitaComponent
+      },
+      {
+        path: 'citas/editar/:id',
+        component: AgendarCitaComponent
+      },
+      {
+        path: 'citas/detalle/:id',
+        component: DetalleCitaComponent
+      },
+      {
+        path: 'citas/cliente/:numeroDocumento',
+        component: ListaCitasComponent
+      },
+      {
+        path: 'citas/veterinario/:numeroDocumento',
+        component: ListaCitasComponent
+      },
+      {
+        path: 'citas/mascota/:mascotaId',
+        component: ListaCitasComponent
       }
-      
     ]
   },
   // Añadir al array de rutas en app-routing.module.ts
@@ -71,7 +102,19 @@ const routes: Routes = [
     { path: 'clientes', component: ClientesComponent },
     { path: 'mascotas', component: MascotasComponent },
     { path: 'mascotas/cliente/:numeroDocumento', component: MascotasComponent },
-    // Añadir más rutas específicas para recepcionista
+    // === RUTAS DE CITAS PARA RECEPCIONISTA ===
+    {
+      path: 'citas',
+      component: ListaCitasComponent
+    },
+    {
+      path: 'citas/nueva',
+      component: AgendarCitaComponent
+    },
+    {
+      path: 'citas/editar/:id',
+      component: AgendarCitaComponent
+    }
   ]
 },
 { 
@@ -84,7 +127,15 @@ const routes: Routes = [
     { path: 'clientes', component: ClientesComponent },
     { path: 'mascotas', component: MascotasComponent },
     { path: 'mascotas/cliente/:numeroDocumento', component: MascotasComponent },
-    // Añadir más rutas específicas para recepcionista
+    // === RUTAS DE CITAS PARA VETERINARIO ===
+    {
+      path: 'citas',
+      component: ListaCitasComponent
+    },
+    {
+      path: 'citas/mis-citas',
+      component: ListaCitasComponent
+    }
   ]
 },
 
@@ -110,5 +161,3 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
-
-

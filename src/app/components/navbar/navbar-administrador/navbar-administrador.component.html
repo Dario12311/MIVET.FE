@@ -12,7 +12,16 @@
         <i class="fas fa-chevron-down"></i>
       </button>
       <div class="dropdown-content">
-        <button class="dropdown-button" [routerLink]="['/veterinarios']">
+        <button class="dropdown-button" [routerLink]="['/dashboard/citas']">
+          <div class="dropdown-item">
+            <i class="fas fa-calendar-check"></i>
+            <div>
+              <h4>Citas</h4>
+              <p>Gestiona la agenda de consultas veterinarias</p>
+            </div>
+          </div>
+        </button>
+        <button class="dropdown-button" [routerLink]="['/dashboard/medicoveterinario']">
           <div class="dropdown-item">
             <i class="fas fa-user-md"></i>
             <div>
@@ -21,7 +30,7 @@
             </div>
           </div>
         </button>
-        <button class="dropdown-button" [routerLink]="['/clientes']">
+        <button class="dropdown-button" [routerLink]="['/dashboard/clientes']">
           <div class="dropdown-item">
             <i class="fas fa-users"></i>
             <div>
@@ -30,7 +39,7 @@
             </div>
           </div>
         </button>
-        <button class="dropdown-button" [routerLink]="['/mascotas']">
+        <button class="dropdown-button" [routerLink]="['/dashboard/mascotas']">
           <div class="dropdown-item">
             <i class="fas fa-paw"></i>
             <div>
@@ -39,12 +48,12 @@
             </div>
           </div>
         </button>
-        <button class="dropdown-button" [routerLink]="['/citas']">
+        <button class="dropdown-button" [routerLink]="['/dashboard/horarios']">
           <div class="dropdown-item">
-            <i class="fas fa-calendar-alt"></i>
+            <i class="fas fa-clock"></i>
             <div>
-              <h4>Citas</h4>
-              <p>Gestiona la agenda de consultas</p>
+              <h4>Horarios</h4>
+              <p>Configura los horarios de atención</p>
             </div>
           </div>
         </button>
@@ -66,4 +75,3 @@
     </ul>
   </div>
 </nav>
-  

@@ -1,0 +1,278 @@
+<div class="detalle-cita-container">
+    <!-- Header -->
+    <div class="page-header">
+      <div class="header-content">
+        <button class="back-btn" (click)="volver()">
+          <i class="fas fa-arrow-left"></i>
+        </button>
+        <div class="header-text">
+          <h1><i class="fas fa-calendar-check"></i> Detalles de la Cita</h1>
+          <p>Información completa de la cita veterinaria</p>
+        </div>
+        <div class="header-actions" *ngIf="cita">
+          <button 
+            class="btn btn-outline-secondary btn-sm"
+            (click)="editarCita()"
+            [disabled]="!puedeEditar()"
+            title="Editar cita">
+            <i class="fas fa-edit"></i> Editar
+          </button>
+          <button 
+            class="btn btn-outline-primary btn-sm"
+            (click)="imprimirCita()"
+            title="Imprimir cita">
+            <i class="fas fa-print"></i> Imprimir
+          </button>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Indicador de carga -->
+    <div *ngIf="cargando" class="loading-container">
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+      <p>Cargando detalles de la cita...</p>
+    </div>
+  
+    <!-- Error -->
+    <div *ngIf="error && !cargando" class="error-container">
+      <i class="fas fa-exclamation-triangle fa-3x"></i>
+      <h3>Error al cargar la cita</h3>
+      <p>{{ error }}</p>
+      <button class="btn btn-primary" (click)="cargarCita()">
+        <i class="fas fa-refresh"></i> Intentar de nuevo
+      </button>
+    </div>
+  
+    <!-- Contenido de la cita -->
+    <div *ngIf="cita && !cargando" class="cita-details">
+      
+      <!-- Estado y Acciones Rápidas -->
+      <div class="status-section">
+        <div class="status-card">
+          <div class="status-info">
+            <div class="status-badge" [style.background]="getColorEstado()">
+              {{ getNombreEstado() }}
+            </div>
+            <div class="cita-id">Cita #{{ cita.id }}</div>
+          </div>
+          
+          <div class="quick-actions" *ngIf="mostrarAccionesRapidas()">
+            <button 
+              *ngIf="cita.estadoCita === 1"
+              class="btn btn-success btn-sm"
+              (click)="confirmarCita()"
+              title="Confirmar cita">
+              <i class="fas fa-check"></i> Confirmar
+            </button>
+            
+            <button 
+              *ngIf="cita.estadoCita === 2"
+              class="btn btn-info btn-sm"
+              (click)="iniciarCita()"
+              title="Iniciar consulta">
+              <i class="fas fa-play"></i> Iniciar
+            </button>
+            
+            <button 
+              *ngIf="cita.estadoCita === 3"
+              class="btn btn-purple btn-sm"
+              (click)="completarCita()"
+              title="Completar cita">
+              <i class="fas fa-check-circle"></i> Completar
+            </button>
+            
+            <button 
+              *ngIf="[1, 2].includes(cita.estadoCita)"
+              class="btn btn-warning btn-sm"
+              (click)="reprogramarCita()"
+              title="Reprogramar">
+              <i class="fas fa-calendar-alt"></i> Reprogramar
+            </button>
+            
+            <button 
+              *ngIf="[1, 2].includes(cita.estadoCita)"
+              class="btn btn-danger btn-sm"
+              (click)="cancelarCita()"
+              title="Cancelar cita">
+              <i class="fas fa-times"></i> Cancelar
+            </button>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Información Principal -->
+      <div class="details-grid">
+        
+        <!-- Información de la Cita -->
+        <div class="detail-card">
+          <div class="card-header">
+            <h3><i class="fas fa-calendar-alt"></i> Información de la Cita</h3>
+          </div>
+          <div class="card-body">
+            <div class="detail-item">
+              <span class="label">Fecha:</span>
+              <span class="value">{{ formatearFecha(cita.fechaCita) }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="label">Hora de inicio:</span>
+              <span class="value">{{ formatearHora(cita.horaInicio) }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="label">Hora de fin:</span>
+              <span class="value">{{ formatearHora(cita.horaFin) }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="label">Duración:</span>
+              <span class="value">{{ cita.duracionMinutos }} minutos</span>
+            </div>
+            <div class="detail-item">
+              <span class="label">Tipo de cita:</span>
+              <span class="value">{{ getNombreTipoCita() }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="label">Estado:</span>
+              <span class="value status-text" [style.color]="getColorEstado()">
+                {{ getNombreEstado() }}
+              </span>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Información del Cliente -->
+        <div class="detail-card">
+          <div class="card-header">
+            <h3><i class="fas fa-user"></i> Cliente</h3>
+          </div>
+          <div class="card-body">
+            <div class="detail-item">
+              <span class="label">Nombre:</span>
+              <span class="value">{{ cita.nombreCliente }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="label">Documento:</span>
+              <span class="value">{{ obtenerDocumentoCliente() }}</span>
+            </div>
+            <div class="action-links">
+              <button class="btn btn-link btn-sm" (click)="verCliente()">
+                <i class="fas fa-eye"></i> Ver perfil del cliente
+              </button>
+              <button class="btn btn-link btn-sm" (click)="verMascotasCliente()">
+                <i class="fas fa-paw"></i> Ver mascotas del cliente
+              </button>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Información de la Mascota -->
+        <div class="detail-card">
+          <div class="card-header">
+            <h3><i class="fas fa-paw"></i> Mascota</h3>
+          </div>
+          <div class="card-body">
+            <div class="detail-item">
+              <span class="label">Nombre:</span>
+              <span class="value">{{ cita.nombreMascota }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="label">ID:</span>
+              <span class="value">#{{ cita.mascotaId }}</span>
+            </div>
+            <div class="action-links">
+              <button class="btn btn-link btn-sm" (click)="verMascota()">
+                <i class="fas fa-eye"></i> Ver perfil de la mascota
+              </button>
+              <button class="btn btn-link btn-sm" (click)="verHistorialMascota()">
+                <i class="fas fa-history"></i> Ver historial de citas
+              </button>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Información del Veterinario -->
+        <div class="detail-card">
+          <div class="card-header">
+            <h3><i class="fas fa-user-md"></i> Veterinario</h3>
+          </div>
+          <div class="card-body">
+            <div class="detail-item">
+              <span class="label">Nombre:</span>
+              <span class="value">{{ cita.nombreVeterinario }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="label">Documento:</span>
+              <span class="value">{{ cita.medicoVeterinarioNumeroDocumento }}</span>
+            </div>
+            <div class="action-links">
+              <button class="btn btn-link btn-sm" (click)="verVeterinario()">
+                <i class="fas fa-eye"></i> Ver perfil del veterinario
+              </button>
+              <button class="btn btn-link btn-sm" (click)="verAgendaVeterinario()">
+                <i class="fas fa-calendar"></i> Ver agenda del veterinario
+              </button>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Motivo y Observaciones -->
+        <div class="detail-card full-width">
+          <div class="card-header">
+            <h3><i class="fas fa-clipboard"></i> Detalles de la Consulta</h3>
+          </div>
+          <div class="card-body">
+            <div class="detail-item">
+              <span class="label">Motivo de la consulta:</span>
+              <div class="value-multiline">{{ cita.motivoConsulta }}</div>
+            </div>
+            <div class="detail-item" *ngIf="cita.observaciones">
+              <span class="label">Observaciones:</span>
+              <div class="value-multiline">{{ cita.observaciones }}</div>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Información de Creación -->
+        <div class="detail-card">
+          <div class="card-header">
+            <h3><i class="fas fa-info-circle"></i> Información de Registro</h3>
+          </div>
+          <div class="card-body">
+            <div class="detail-item">
+              <span class="label">Fecha de creación:</span>
+              <span class="value">{{ formatearFecha(cita.fechaCreacion) }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="label">Creado por:</span>
+              <span class="value">{{ cita.creadoPor }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="label">Tipo de usuario:</span>
+              <span class="value">{{ obtenerTipoUsuarioCreador() }}</span>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Timeline de Estados (si aplica) -->
+        <div class="detail-card" *ngIf="mostrarTimeline()">
+          <div class="card-header">
+            <h3><i class="fas fa-history"></i> Historial de Estados</h3>
+          </div>
+          <div class="card-body">
+            <div class="timeline">
+              <div class="timeline-item" *ngFor="let item of timelineEstados">
+                <div class="timeline-marker" [class]="item.clase"></div>
+                <div class="timeline-content">
+                  <div class="timeline-title">{{ item.estado }}</div>
+                  <div class="timeline-date">{{ item.fecha }}</div>
+                  <div class="timeline-description" *ngIf="item.descripcion">
+                    {{ item.descripcion }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
