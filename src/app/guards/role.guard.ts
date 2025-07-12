@@ -67,6 +67,12 @@ export class RoleGuard implements CanActivate {
       case 'RECEPCIONISTA':
         this.router.navigate(['/dashboard-recepcionista']);
         break;
+      case 'VETERINARIO':
+        this.router.navigate(['/dashboard-veterinario']);
+        break;
+      case 'CLIENTE':
+        this.router.navigate(['/dashboard-cliente']);
+        break;
       default:
         console.log('Rol no reconocido, redirigiendo a Inicio');
         this.router.navigate(['/Inicio']);

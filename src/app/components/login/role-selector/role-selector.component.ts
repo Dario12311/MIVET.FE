@@ -50,6 +50,9 @@ export class RoleSelectorComponent implements OnInit {
         case 'VETERINARIO':
           this.router.navigate(['/dashboard-veterinario']);
           break;
+          case 'CLIENTE':
+          this.router.navigate(['/dashboard-cliente']);
+          break;
         default:
           this.router.navigate(['/Inicio']);
           break;

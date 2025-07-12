@@ -22,6 +22,7 @@ import { RegistroHorarioComponent } from './components/dashboard/registro-horari
 import { AgendarCitaComponent } from './components/dashboard/agendar-cita/agendar-cita.component';
 import { ListaCitasComponent } from './components/dashboard/lista-citas/lista-citas.component';
 import { DetalleCitaComponent } from './components/dashboard/detalle-cita/detalle-cita.component';
+import { DashboardClienteComponent } from './components/dashboard-cliente/dashboard-cliente.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'Inicio', pathMatch: 'full' },
@@ -139,12 +140,27 @@ const routes: Routes = [
   ]
 },
 
-  { 
-    path: 'dashboard', 
-    component: DashboardComponent,
-    canActivate: [RoleGuard],
-    data: { roles: ['ADMINISTRADOR'] }
-  },
+{ 
+  path: 'dashboard-cliente', 
+  component: DashboardClienteComponent,
+  canActivate: [RoleGuard],
+  data: { roles: ['CLIENTE'] },
+  children: [
+    { path: '', component: InicioDashboardComponent },
+    { path: 'mascotas', component: MascotasComponent },
+    { path: 'citas', component: ListaCitasComponent },
+    { path: 'citas/nueva', component: AgendarCitaComponent },
+    { path: 'historial', component: ListaCitasComponent },
+    { path: 'perfil', component: UpdateclienteComponent }
+  ]
+},
+
+{ 
+  path: 'dashboard', 
+  component: DashboardComponent,
+  canActivate: [RoleGuard],
+  data: { roles: ['ADMINISTRADOR'] }
+},
  
   { path: 'Inicio', component: InicioComponent },
   { path: 'Funcionalidades', component: FuncionalidadesComponent },

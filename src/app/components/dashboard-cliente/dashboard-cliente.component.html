@@ -1,1 +1,43 @@
-<p>dashboard-cliente works!</p>
+<div class="dashboard-container">
+  <div class="dashboard-sidebar">
+    <div class="sidebar-header">
+      <img src="assets/Imagenes/Logo.PNG" alt="Avatar" class="avatar" />
+      <div class="user-details">
+        <h3>{{ nombreUsuario }}</h3>
+        <p>Cliente</p>
+        <span class="status online">En línea</span>
+      </div>
+    </div>
+    
+    <div class="sidebar-menu">
+      <a class="menu-item" [routerLink]="['/dashboard-cliente']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="{exact: true}">
+        <i class="fas fa-home"></i>
+        <span>Inicio</span>
+      </a>
+      <a class="menu-item" routerLink="/dashboard-cliente/mascotas" routerLinkActive="active">
+        <i class="fas fa-paw"></i>
+        <span>Mis Mascotas</span>
+      </a>
+      <a class="menu-item" routerLink="/dashboard-cliente/citas" routerLinkActive="active">
+        <i class="fas fa-calendar-alt"></i>
+        <span>Mis Citas</span>
+      </a>
+      <a class="menu-item" routerLink="/dashboard-cliente/historial" routerLinkActive="active">
+        <i class="fas fa-clipboard"></i>
+        <span>Historial Clínico</span>
+      </a>
+      <a class="menu-item" routerLink="/dashboard-cliente/pagos" routerLinkActive="active">
+        <i class="fas fa-credit-card"></i>
+        <span>Pagos</span>
+      </a>
+      <a class="menu-item" routerLink="/dashboard-cliente/perfil" routerLinkActive="active">
+        <i class="fas fa-user"></i>
+        <span>Mi Perfil</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="dashboard-main">
+    <router-outlet></router-outlet>
+  </div>
+</div>

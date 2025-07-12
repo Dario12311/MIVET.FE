@@ -276,11 +276,13 @@ export class LoginComponent {
     } else if (roles.includes('RECEPCIONISTA')) {
       localStorage.setItem('selectedRole', 'RECEPCIONISTA');
       this.router.navigate(['/dashboard-recepcionista']);
-    }else if (roles.includes('VETERINARIO')) {
+    } else if (roles.includes('VETERINARIO')) {
       localStorage.setItem('selectedRole', 'VETERINARIO');
       this.router.navigate(['/dashboard-veterinario']);
-    }
-    else {
+    } else if (roles.includes('CLIENTE')) {
+      localStorage.setItem('selectedRole', 'CLIENTE');
+      this.router.navigate(['/dashboard-cliente']);
+    } else {
       this.router.navigate(['/Inicio']);
     }
   }
