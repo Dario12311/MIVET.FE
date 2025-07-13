@@ -1,0 +1,352 @@
+<div class="agendar-cita-container">
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-content">
+      <button class="back-btn" (click)="volver()">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <div class="header-text">
+        <h1><i class="fas fa-calendar-plus"></i> Agendar Cita para mis Mascotas</h1>
+        <p>Programa una cita veterinaria para tus mascotas</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Indicador de carga inicial -->
+  <div *ngIf="cargando" class="loading-container">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p>Cargando información...</p>
+  </div>
+
+  <!-- Formulario -->
+  <div *ngIf="!cargando" class="form-container">
+    <form [formGroup]="citaForm" (ngSubmit)="guardarCita()">
+      
+      <!-- Información del Cliente (Solo lectura) -->
+      <div class="form-section">
+        <div class="section-header">
+          <i class="fas fa-user"></i>
+          <h2>Mi Información</h2>
+        </div>
+        
+        <div class="cliente-info-readonly">
+          <div class="info-item">
+            <i class="fas fa-user"></i>
+            <span class="label">Cliente:</span>
+            <span class="value">{{ obtenerNombreClienteCompleto() }}</span>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-id-card"></i>
+            <span class="label">Documento:</span>
+            <span class="value">{{ numeroDocumento }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sección Mascota -->
+      <div class="form-section">
+        <div class="section-header">
+          <i class="fas fa-paw"></i>
+          <h2>Seleccionar Mascota</h2>
+        </div>
+        
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="mascota">Mi Mascota *</label>
+            <select 
+              id="mascota" 
+              class="form-control" 
+              formControlName="mascotaId"
+              [class.is-invalid]="citaForm.get('mascotaId')?.invalid && citaForm.get('mascotaId')?.touched">
+              <option value="">Seleccionar mascota...</option>
+              <option *ngFor="let mascota of mascotasCliente" [value]="mascota.id">
+                {{ mascota.nombre }} - {{ mascota.especie }} ({{ mascota.raza }})
+              </option>
+            </select>
+            <div class="invalid-feedback" *ngIf="citaForm.get('mascotaId')?.invalid && citaForm.get('mascotaId')?.touched">
+              Debe seleccionar una mascota
+            </div>
+            
+            <!-- Mensaje cuando no hay mascotas -->
+            <div *ngIf="mascotasCliente.length === 0 && !cargandoMascotas" class="no-mascotas-warning">
+              <i class="fas fa-exclamation-triangle"></i>
+              <p>No tienes mascotas registradas.</p>
+              <button type="button" class="btn btn-outline-primary btn-sm" (click)="irARegistrarMascota()">
+                <i class="fas fa-plus"></i> Registrar mi primera mascota
+              </button>
+            </div>
+            
+            <!-- Loading mascotas -->
+            <div *ngIf="cargandoMascotas" class="loading-mascotas">
+              <div class="spinner-border spinner-sm"></div>
+              <span>Cargando tus mascotas...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sección Fecha y Hora -->
+      <div class="form-section" *ngIf="citaForm.get('mascotaId')?.value">
+        <div class="section-header">
+          <i class="fas fa-calendar-alt"></i>
+          <h2>Fecha y Tipo de Cita</h2>
+        </div>
+        
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="fechaCita">Fecha de la Cita *</label>
+            <input 
+              type="date" 
+              id="fechaCita" 
+              class="form-control" 
+              formControlName="fechaCita"
+              [min]="fechaMinima"
+              [max]="fechaMaxima"
+              (change)="onFechaCambio()"
+              [class.is-invalid]="citaForm.get('fechaCita')?.invalid && citaForm.get('fechaCita')?.touched">
+            <div class="invalid-feedback" *ngIf="citaForm.get('fechaCita')?.invalid && citaForm.get('fechaCita')?.touched">
+              <span *ngIf="citaForm.get('fechaCita')?.errors?.['required']">La fecha es requerida</span>
+              <span *ngIf="citaForm.get('fechaCita')?.errors?.['fechaInvalida']">La fecha debe ser futura</span>
+            </div>
+            <small class="form-text">Puedes agendar citas hasta 2 años en el futuro</small>
+          </div>
+
+          <div class="form-group">
+            <label for="tipoCita">Tipo de Cita *</label>
+            <select 
+              id="tipoCita" 
+              class="form-control" 
+              formControlName="tipoCita"
+              (change)="onTipoCitaCambio()"
+              [class.is-invalid]="citaForm.get('tipoCita')?.invalid && citaForm.get('tipoCita')?.touched">
+              <option value="">Seleccionar tipo...</option>
+              <option *ngFor="let tipo of tiposCita" [value]="tipo.id">
+                {{ tipo.nombre }} ({{ tipo.duracionMinima }} min) - {{ tipo.descripcion }}
+              </option>
+            </select>
+            <div class="invalid-feedback" *ngIf="citaForm.get('tipoCita')?.invalid && citaForm.get('tipoCita')?.touched">
+              Debe seleccionar un tipo de cita
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sección Veterinario Disponible -->
+      <div class="form-section" *ngIf="citaForm.get('fechaCita')?.value && citaForm.get('tipoCita')?.value">
+        <div class="section-header">
+          <i class="fas fa-user-md"></i>
+          <h2>Veterinarios Disponibles</h2>
+        </div>
+
+        <div class="veterinario-selection">
+          <div *ngIf="cargandoVeterinarios" class="loading-veterinarios">
+            <div class="spinner-border spinner-sm" role="status"></div>
+            <span>Buscando veterinarios disponibles...</span>
+          </div>
+
+          <div *ngIf="!cargandoVeterinarios && veterinariosDisponibles.length === 0 && citaForm.get('fechaCita')?.value">
+            <div class="no-veterinarios">
+              <i class="fas fa-exclamation-triangle"></i>
+              <p>No hay veterinarios disponibles para la fecha y tipo de cita seleccionada</p>
+              <p class="suggestion">Intenta seleccionar otra fecha o tipo de cita</p>
+              <button type="button" class="btn btn-outline-primary" (click)="buscarVeterinariosDisponibles()">
+                <i class="fas fa-search"></i> Buscar Nuevamente
+              </button>
+            </div>
+          </div>
+
+          <div *ngIf="!cargandoVeterinarios && veterinariosDisponibles.length > 0" class="veterinarios-grid">
+            <div 
+              *ngFor="let veterinario of veterinariosDisponibles" 
+              class="veterinario-card"
+              [class.selected]="veterinarioSeleccionado?.numeroDocumento === veterinario.numeroDocumento"
+              (click)="seleccionarVeterinario(veterinario)">
+              
+              <div class="veterinario-info">
+                <h4>{{ veterinario.nombre }}</h4>
+                <p><strong>Especialidad:</strong> {{ veterinario.especialidad }}</p>
+                
+                <div class="horarios-disponibles" *ngIf="veterinario.horasDisponibles && veterinario.horasDisponibles.length > 0">
+                  <span class="horarios-label">Horarios disponibles:</span>
+                  <div class="horarios-grid">
+                    <span 
+                      *ngFor="let hora of (veterinario.horasDisponibles || []).slice(0, 6)" 
+                      class="hora-chip"
+                      [class.selected]="horaSeleccionada === hora.hora"
+                      (click)="seleccionarHora(hora.hora, $event)">
+                      {{ formatearHora(hora.hora) }}
+                    </span>
+                    <span *ngIf="veterinario.horasDisponibles && veterinario.horasDisponibles.length > 6" class="mas-horarios">
+                      +{{ (veterinario.horasDisponibles && veterinario.horasDisponibles.length || 0) - 6 }} más
+                    </span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="veterinario-actions">
+                <i class="fas fa-check-circle" *ngIf="veterinarioSeleccionado?.numeroDocumento === veterinario.numeroDocumento"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sección Hora Específica -->
+      <div class="form-section" *ngIf="veterinarioSeleccionado && !horaSeleccionada">
+        <div class="section-header">
+          <i class="fas fa-clock"></i>
+          <h2>Seleccionar Hora Específica</h2>
+        </div>
+        
+        <div class="horas-disponibles-detalle">
+          <div class="horas-grid">
+            <button 
+              type="button"
+              *ngFor="let hora of (veterinarioSeleccionado.horasDisponibles || [])" 
+              class="hora-btn"
+              [class.selected]="horaSeleccionada === hora.hora"
+              [disabled]="!hora.disponible"
+              (click)="seleccionarHora(hora.hora)">
+              {{ formatearHora(hora.hora) }}
+              <small *ngIf="!hora.disponible">{{ hora.motivoNoDisponible }}</small>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sección Detalles de la Cita -->
+      <div class="form-section" *ngIf="veterinarioSeleccionado && horaSeleccionada">
+        <div class="section-header">
+          <i class="fas fa-clipboard"></i>
+          <h2>Detalles de la Cita</h2>
+        </div>
+        
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="duracionMinutos">Duración (minutos) *</label>
+            <select 
+              id="duracionMinutos" 
+              class="form-control" 
+              formControlName="duracionMinutos"
+              [class.is-invalid]="citaForm.get('duracionMinutos')?.invalid && citaForm.get('duracionMinutos')?.touched">
+              <option *ngFor="let duracion of duracionesDisponibles" [value]="duracion">
+                {{ duracion }} minutos
+              </option>
+            </select>
+            <div class="invalid-feedback" *ngIf="citaForm.get('duracionMinutos')?.invalid && citaForm.get('duracionMinutos')?.touched">
+              Debe seleccionar una duración
+            </div>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="motivoConsulta">Motivo de la Consulta *</label>
+            <textarea 
+              id="motivoConsulta" 
+              class="form-control" 
+              formControlName="motivoConsulta"
+              rows="3"
+              placeholder="Describe el motivo de la consulta (síntomas, comportamiento, etc.)..."
+              [class.is-invalid]="citaForm.get('motivoConsulta')?.invalid && citaForm.get('motivoConsulta')?.touched"></textarea>
+            <div class="invalid-feedback" *ngIf="citaForm.get('motivoConsulta')?.invalid && citaForm.get('motivoConsulta')?.touched">
+              El motivo de la consulta es requerido (mínimo 10 caracteres)
+            </div>
+            <small class="form-text">Proporciona detalles que ayuden al veterinario a prepararse para la consulta</small>
+          </div>
+
+          <div class="form-group full-width">
+            <label for="observaciones">Observaciones Adicionales</label>
+            <textarea 
+              id="observaciones" 
+              class="form-control" 
+              formControlName="observaciones"
+              rows="2"
+              placeholder="Cualquier información adicional que consideres importante (opcional)..."></textarea>
+            <small class="form-text">Información opcional como alergias, medicamentos actuales, etc.</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resumen de la Cita -->
+      <div class="form-section" *ngIf="mostrarResumen" id="resumen-cita">
+        <div class="section-header">
+          <i class="fas fa-check-circle"></i>
+          <h2>Resumen de tu Cita</h2>
+        </div>
+        
+        <div class="resumen-card">
+          <div class="resumen-grid">
+            <div class="resumen-item">
+              <i class="fas fa-user"></i>
+              <div>
+                <span class="label">Cliente:</span>
+                <span class="value">{{ obtenerNombreClienteCompleto() }}</span>
+              </div>
+            </div>
+            
+            <div class="resumen-item">
+              <i class="fas fa-paw"></i>
+              <div>
+                <span class="label">Mascota:</span>
+                <span class="value">{{ obtenerNombreMascota() }}</span>
+              </div>
+            </div>
+            
+            <div class="resumen-item">
+              <i class="fas fa-calendar"></i>
+              <div>
+                <span class="label">Fecha:</span>
+                <span class="value">{{ formatearFechaResumen() }}</span>
+              </div>
+            </div>
+            
+            <div class="resumen-item">
+              <i class="fas fa-clock"></i>
+              <div>
+                <span class="label">Hora:</span>
+                <span class="value">{{ formatearHora(horaSeleccionada) }} ({{ citaForm.get('duracionMinutos')?.value }} min)</span>
+              </div>
+            </div>
+            
+            <div class="resumen-item">
+              <i class="fas fa-user-md"></i>
+              <div>
+                <span class="label">Veterinario:</span>
+                <span class="value">{{ veterinarioSeleccionado?.nombre }}</span>
+              </div>
+            </div>
+            
+            <div class="resumen-item">
+              <i class="fas fa-stethoscope"></i>
+              <div>
+                <span class="label">Tipo:</span>
+                <span class="value">{{ obtenerNombreTipoCita() }}</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="resumen-importante">
+            <i class="fas fa-info-circle"></i>
+            <p><strong>Importante:</strong> Llega 15 minutos antes de tu cita. Recuerda traer la cartilla de vacunación de tu mascota.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botones de acción -->
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" (click)="volver()">
+          <i class="fas fa-times"></i> Cancelar
+        </button>
+        <button 
+          type="submit" 
+          class="btn btn-primary" 
+          [disabled]="citaForm.invalid || guardando || !mostrarResumen">
+          <i class="fas fa-save"></i> 
+          <span *ngIf="!guardando">Agendar mi Cita</span>
+          <span *ngIf="guardando">Agendando...</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

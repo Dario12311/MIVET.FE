@@ -22,13 +22,26 @@ import { RegistroHorarioComponent } from './components/dashboard/registro-horari
 import { AgendarCitaComponent } from './components/dashboard/agendar-cita/agendar-cita.component';
 import { ListaCitasComponent } from './components/dashboard/lista-citas/lista-citas.component';
 import { DetalleCitaComponent } from './components/dashboard/detalle-cita/detalle-cita.component';
+import { DashboardClienteComponent } from './components/dashboard-cliente/dashboard-cliente.component';
+import { HistorialClinicoClienteComponent } from './components/dashboard-cliente/historial-clinico-cliente/historial-clinico-cliente.component';
+import { InicioDashboardClienteComponent } from './components/dashboard-cliente/inicio-dashboard-cliente/inicio-dashboard-cliente.component';
+import { PerfilClienteComponent } from './components/dashboard-cliente/perfil-cliente/perfil-cliente.component';
+import { MascotasClienteComponent } from './components/dashboard-cliente/mascotas-cliente/mascotas-cliente.component';
+
+// === IMPORTAR LOS NUEVOS COMPONENTES ESPECÍFICOS DEL CLIENTE ===
+import { AgendarCitaClienteComponent } from './components/dashboard-cliente/agendar-cita-cliente/agendar-cita-cliente.component';
+import { ListaCitasClienteComponent } from './components/dashboard-cliente/lista-citas-cliente/lista-citas-cliente.component';
+import { DetalleCitaClienteComponent } from './components/dashboard-cliente/detalle-cita-cliente/detalle-cita-cliente.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'Inicio', pathMatch: 'full' },
+  
+  // === DASHBOARD ADMINISTRADOR ===
   { 
     path: 'dashboard', 
     component: DashboardComponent,
     canActivate: [RoleGuard],
+    data: { roles: ['ADMINISTRADOR', 'RECEPCIONISTA'] },
     children: [
       { path: '', component: InicioDashboardComponent },
       { path: 'clientes', component: ClientesComponent },
@@ -60,7 +73,7 @@ const routes: Routes = [
         path: 'horarios/veterinario/:numeroDocumento',
         component: ListaHorariosComponent
       },
-      // === NUEVAS RUTAS PARA CITAS ===
+      // === RUTAS DE CITAS PARA ADMINISTRADOR ===
       {
         path: 'citas',
         component: ListaCitasComponent
@@ -91,68 +104,123 @@ const routes: Routes = [
       }
     ]
   },
-  // Añadir al array de rutas en app-routing.module.ts
-{ 
-  path: 'dashboard-recepcionista', 
-  component: DashboardrecepcionistaComponent,
-  canActivate: [RoleGuard],
-  data: { roles: ['RECEPCIONISTA'] },
-  children: [
-    { path: '', component: InicioDashboardComponent },
-    { path: 'clientes', component: ClientesComponent },
-    { path: 'mascotas', component: MascotasComponent },
-    { path: 'mascotas/cliente/:numeroDocumento', component: MascotasComponent },
-    // === RUTAS DE CITAS PARA RECEPCIONISTA ===
-    {
-      path: 'citas',
-      component: ListaCitasComponent
-    },
-    {
-      path: 'citas/nueva',
-      component: AgendarCitaComponent
-    },
-    {
-      path: 'citas/editar/:id',
-      component: AgendarCitaComponent
-    }
-  ]
-},
-{ 
-  path: 'dashboard-veterinario', 
-  component: DashboardveterinarioComponent,
-  canActivate: [RoleGuard],
-  data: { roles: ['VETERINARIO'] },
-  children: [
-    { path: '', component: InicioDashboardComponent },
-    { path: 'clientes', component: ClientesComponent },
-    { path: 'mascotas', component: MascotasComponent },
-    { path: 'mascotas/cliente/:numeroDocumento', component: MascotasComponent },
-    // === RUTAS DE CITAS PARA VETERINARIO ===
-    {
-      path: 'citas',
-      component: ListaCitasComponent
-    },
-    {
-      path: 'citas/mis-citas',
-      component: ListaCitasComponent
-    }
-  ]
-},
 
+  // === DASHBOARD RECEPCIONISTA ===
   { 
-    path: 'dashboard', 
-    component: DashboardComponent,
+    path: 'dashboard-recepcionista', 
+    component: DashboardrecepcionistaComponent,
     canActivate: [RoleGuard],
-    data: { roles: ['ADMINISTRADOR'] }
+    data: { roles: ['RECEPCIONISTA'] },
+    children: [
+      { path: '', component: InicioDashboardComponent },
+      { path: 'clientes', component: ClientesComponent },
+      { path: 'mascotas', component: MascotasComponent },
+      { path: 'mascotas/cliente/:numeroDocumento', component: MascotasComponent },
+      // === RUTAS DE CITAS PARA RECEPCIONISTA ===
+      {
+        path: 'citas',
+        component: ListaCitasComponent
+      },
+      {
+        path: 'citas/nueva',
+        component: AgendarCitaComponent
+      },
+      {
+        path: 'citas/editar/:id',
+        component: AgendarCitaComponent
+      }
+    ]
   },
- 
+
+  // === DASHBOARD VETERINARIO ===
+  { 
+    path: 'dashboard-veterinario', 
+    component: DashboardveterinarioComponent,
+    canActivate: [RoleGuard],
+    data: { roles: ['VETERINARIO'] },
+    children: [
+      { path: '', component: InicioDashboardComponent },
+      { path: 'clientes', component: ClientesComponent },
+      { path: 'mascotas', component: MascotasComponent },
+      { path: 'mascotas/cliente/:numeroDocumento', component: MascotasComponent },
+      // === RUTAS DE CITAS PARA VETERINARIO ===
+      {
+        path: 'citas',
+        component: ListaCitasComponent
+      },
+      {
+        path: 'citas/mis-citas',
+        component: ListaCitasComponent
+      }
+    ]
+  },
+
+  // === DASHBOARD CLIENTE (USANDO COMPONENTES ESPECÍFICOS) ===
+  { 
+    path: 'dashboard-cliente', 
+    component: DashboardClienteComponent,
+    canActivate: [RoleGuard],
+    data: { roles: ['CLIENTE'] },
+    children: [
+      { path: '', component: InicioDashboardClienteComponent },
+      
+      // === GESTIÓN DE PERFIL ===
+      { path: 'perfil', component: PerfilClienteComponent },
+      
+      // === GESTIÓN DE MASCOTAS ===
+      { path: 'mascotas/cliente/:numeroDocumento', component: MascotasClienteComponent },
+      { path: 'nuevamascota', component: RegistromascotaComponent },
+      { path: 'mascotas/editar/:id', component: RegistromascotaComponent },
+      
+      // === GESTIÓN DE CITAS (COMPONENTES ESPECÍFICOS DEL CLIENTE) ===
+      {
+        path: 'citas',
+        component: ListaCitasClienteComponent // ⭐ Componente específico del cliente
+      },
+      {
+        path: 'citas/nueva',
+        component: AgendarCitaClienteComponent // ⭐ Componente específico del cliente
+      },
+      {
+        path: 'citas/editar/:id',
+        component: AgendarCitaClienteComponent // ⭐ Componente específico del cliente
+      },
+      {
+        path: 'citas/detalle/:id',
+        component: DetalleCitaClienteComponent // ⭐ Componente específico del cliente
+      },
+      {
+        path: 'citas/mascota/:mascotaId',
+        component: ListaCitasClienteComponent // ⭐ Componente específico del cliente
+      },
+      {
+        path: 'citas/mis-citas',
+        component: ListaCitasClienteComponent // ⭐ Componente específico del cliente
+      },
+      {
+        path: 'citas/proximas',
+        component: ListaCitasClienteComponent // ⭐ Solo citas próximas del cliente
+      },
+      
+      // === HISTORIA CLÍNICA ===
+      {
+        path: 'historial',
+        component: HistorialClinicoClienteComponent
+      },
+      {
+        path: 'historial/mascota/:mascotaId',
+        component: HistorialClinicoClienteComponent
+      }
+    ]
+  },
+
+  // === RUTAS PRINCIPALES ===
   { path: 'Inicio', component: InicioComponent },
   { path: 'Funcionalidades', component: FuncionalidadesComponent },
   { path: 'Login', component: LoginComponent },
   { path: 'role-selector', component: RoleSelectorComponent },
-  // Elimina esta ruta duplicada o actualízala si es necesaria
-  // {path: 'clientes', component: ClientesComponent},
-  // Ruta de fallback
+  
+  // === RUTA DE FALLBACK ===
   { path: '**', redirectTo: 'Inicio' }
 ];
 

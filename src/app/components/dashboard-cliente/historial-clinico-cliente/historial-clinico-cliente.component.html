@@ -1,0 +1,306 @@
+<div class="historial-container">
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-content">
+      <button class="back-btn" (click)="volver()">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <div class="header-text">
+        <h1><i class="fas fa-clipboard-list"></i> Historia Clínica</h1>
+        <p>Consulta el historial médico de tus mascotas</p>
+      </div>
+      <button class="btn btn-primary" (click)="agendarNuevaCita()" *ngIf="mascotaSeleccionada">
+        <i class="fas fa-calendar-plus"></i> Agendar Cita
+      </button>
+    </div>
+  </div>
+
+  <!-- Selector de mascota -->
+  <div class="selector-mascota" *ngIf="!cargando && mascotas.length > 0">
+    <div class="selector-header">
+      <h2>Selecciona una mascota</h2>
+      <p>Elige la mascota para ver su historia clínica</p>
+    </div>
+    
+    <div class="mascotas-selector-grid">
+      <div 
+        *ngFor="let mascota of mascotas" 
+        class="mascota-selector-card"
+        [class.selected]="mascotaSeleccionada?.id === mascota.id"
+        (click)="seleccionarMascota(mascota)">
+        
+        <div class="mascota-icon">
+          <i [class]="getIconoEspecie(mascota.especie)"></i>
+        </div>
+        <div class="mascota-info">
+          <h4>{{ mascota.nombre }}</h4>
+          <p>{{ mascota.especie }} - {{ mascota.raza }}</p>
+          <small>{{ mascota.edad }} {{ mascota.edad === 1 ? 'año' : 'años' }}</small>
+        </div>
+        <div class="selector-icon" *ngIf="mascotaSeleccionada?.id === mascota.id">
+          <i class="fas fa-check-circle"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Indicador de carga -->
+  <div *ngIf="cargando" class="loading-container">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p>Cargando historial clínico...</p>
+  </div>
+
+  <!-- Estado sin mascotas -->
+  <div *ngIf="!cargando && mascotas.length === 0" class="empty-state">
+    <i class="fas fa-paw fa-3x"></i>
+    <h3>No tienes mascotas registradas</h3>
+    <p>Para ver la historia clínica, primero debes registrar una mascota</p>
+    <button class="btn btn-primary" routerLink="/dashboard-cliente/mascotas">
+      <i class="fas fa-plus"></i> Registrar Mascota
+    </button>
+  </div>
+
+  <!-- Historial clínico -->
+  <div *ngIf="!cargando && mascotaSeleccionada" class="historial-section">
+    
+    <!-- Información de la mascota seleccionada -->
+    <div class="mascota-info-card">
+      <div class="mascota-header">
+        <div class="mascota-avatar">
+          <i [class]="getIconoEspecie(mascotaSeleccionada.especie)"></i>
+        </div>
+        <div class="mascota-details">
+          <h3>{{ mascotaSeleccionada.nombre }}</h3>
+          <p>{{ mascotaSeleccionada.especie }} - {{ mascotaSeleccionada.raza }}</p>
+          <div class="mascota-stats">
+            <span class="stat-item">
+              <i class="fas fa-calendar"></i>
+              {{ mascotaSeleccionada.edad }} {{ mascotaSeleccionada.edad === 1 ? 'año' : 'años' }}
+            </span>
+            <span class="stat-item">
+              <i class="fas fa-venus-mars"></i>
+              {{ mascotaSeleccionada.genero === 'M' ? 'Macho' : 'Hembra' }}
+            </span>
+          </div>
+        </div>
+        <div class="mascota-actions">
+          <button class="btn btn-outline-primary btn-sm" (click)="verCitasMascota()">
+            <i class="fas fa-calendar-check"></i> Ver Citas
+          </button>
+          <button class="btn btn-outline-secondary btn-sm" (click)="editarMascota()">
+            <i class="fas fa-edit"></i> Editar
+          </button>
+        </div>
+      </div>
+
+      <!-- Resumen del historial -->
+      <div class="historial-resumen" *ngIf="hayHistorialDisponible()">
+        <div class="resumen-stats">
+          <div class="stat-card">
+            <i class="fas fa-clipboard-list"></i>
+            <div class="stat-info">
+              <h4>{{ getResumenHistorial().total }}</h4>
+              <p>Consultas Totales</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <i class="fas fa-clock"></i>
+            <div class="stat-info">
+              <h4>{{ getResumenHistorial().recientes }}</h4>
+              <p>Últimos 30 días</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <i class="fas fa-stethoscope"></i>
+            <div class="stat-info">
+              <h4>{{ getResumenHistorial().ultimaVisita }}</h4>
+              <p>Última Consulta</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lista del historial -->
+    <div class="historial-lista">
+      <!-- Sin historial -->
+      <div *ngIf="!hayHistorialDisponible()" class="no-historial">
+        <i class="fas fa-clipboard fa-3x"></i>
+        <h3>Sin historial clínico</h3>
+        <p>{{ mascotaSeleccionada.nombre }} aún no tiene registros en su historia clínica</p>
+        <button class="btn btn-primary" (click)="agendarNuevaCita()">
+          <i class="fas fa-calendar-plus"></i> Agendar Primera Consulta
+        </button>
+      </div>
+
+      <!-- Con historial -->
+      <div *ngIf="hayHistorialDisponible()" class="registros-historial">
+        <div class="lista-header">
+          <h2>Registros Médicos</h2>
+          <p>{{ historialClinico.length }} registro{{ historialClinico.length === 1 ? '' : 's' }} disponible{{ historialClinico.length === 1 ? '' : 's' }}</p>
+        </div>
+
+        <div class="timeline">
+          <div 
+            *ngFor="let registro of historialClinico; let i = index" 
+            class="timeline-item"
+            (click)="verDetalleHistorial(registro)">
+            
+            <div class="timeline-marker">
+              <i class="fas fa-stethoscope"></i>
+            </div>
+            
+            <div class="timeline-content">
+              <div class="registro-header">
+                <div class="registro-fecha">
+                  <h4>{{ formatearFecha(registro.fechaRegistro) }}</h4>
+                  <span class="tiempo-transcurrido">{{ getTiempoTranscurrido(registro.fechaRegistro) }}</span>
+                </div>
+                <div class="registro-estado">
+                  <span class="badge" [style.background-color]="getColorEstadoHistorial(registro.estado)">
+                    {{ getNombreEstadoHistorial(registro.estado) }}
+                  </span>
+                </div>
+              </div>
+              
+              <div class="registro-info">
+                <div class="info-row">
+                  <i class="fas fa-user-md"></i>
+                  <span>Dr. {{ registro.nombreVeterinario }}</span>
+                </div>
+                <div class="info-row" *ngIf="registro.motivoConsulta">
+                  <i class="fas fa-comment-medical"></i>
+                  <span>{{ registro.motivoConsulta }}</span>
+                </div>
+                <div class="info-row" *ngIf="registro.diagnostico">
+                  <i class="fas fa-diagnoses"></i>
+                  <span>{{ registro.diagnostico }}</span>
+                </div>
+              </div>
+              
+              <div class="registro-actions">
+                <span class="ver-detalle">
+                  <i class="fas fa-eye"></i> Ver detalles
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de detalle del historial -->
+<div class="modal-backdrop" *ngIf="mostrarModalDetalle" (click)="cerrarModalDetalle()">
+  <div class="modal-content modal-large" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3><i class="fas fa-file-medical"></i> Detalle de Consulta</h3>
+      <button type="button" class="btn-close" (click)="cerrarModalDetalle()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    
+    <div class="modal-body" *ngIf="historialDetallado">
+      <!-- Información de la cita -->
+      <div class="detalle-section">
+        <h4><i class="fas fa-calendar-check"></i> Información de la Cita</h4>
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="label">Fecha:</span>
+            <span class="value">{{ formatearFecha(historialDetallado.historialClinico.fechaRegistro) }}</span>
+          </div>
+          <div class="info-item" *ngIf="historialDetallado.cita">
+            <span class="label">Hora:</span>
+            <span class="value">{{ formatearHora(historialDetallado.cita.horaCita) }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Veterinario:</span>
+            <span class="value">Dr. {{ historialDetallado.historialClinico.nombreVeterinario }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Tipo de consulta:</span>
+            <span class="value">{{ historialDetallado.cita?.tipoCita || 'Consulta general' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Motivo de consulta -->
+      <div class="detalle-section" *ngIf="historialDetallado.historialClinico.motivoConsulta">
+        <h4><i class="fas fa-comment-medical"></i> Motivo de Consulta</h4>
+        <p class="texto-contenido">{{ historialDetallado.historialClinico.motivoConsulta }}</p>
+      </div>
+
+      <!-- Examen físico -->
+      <div class="detalle-section" *ngIf="historialDetallado.historialClinico.examenFisico">
+        <h4><i class="fas fa-search"></i> Examen Físico</h4>
+        <p class="texto-contenido">{{ historialDetallado.historialClinico.examenFisico }}</p>
+      </div>
+
+      <!-- Signos vitales -->
+      <div class="detalle-section" *ngIf="historialDetallado.historialClinico.temperatura || historialDetallado.historialClinico.peso">
+        <h4><i class="fas fa-heartbeat"></i> Signos Vitales</h4>
+        <div class="vitales-grid">
+          <div class="vital-item" *ngIf="historialDetallado.historialClinico.temperatura">
+            <i class="fas fa-thermometer-half"></i>
+            <span class="vital-label">Temperatura:</span>
+            <span class="vital-value">{{ historialDetallado.historialClinico.temperatura }}°C</span>
+          </div>
+          <div class="vital-item" *ngIf="historialDetallado.historialClinico.peso">
+            <i class="fas fa-weight"></i>
+            <span class="vital-label">Peso:</span>
+            <span class="vital-value">{{ historialDetallado.historialClinico.peso }} kg</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Diagnóstico -->
+      <div class="detalle-section" *ngIf="historialDetallado.historialClinico.diagnostico">
+        <h4><i class="fas fa-diagnoses"></i> Diagnóstico</h4>
+        <p class="texto-contenido diagnostico">{{ historialDetallado.historialClinico.diagnostico }}</p>
+      </div>
+
+      <!-- Tratamiento -->
+      <div class="detalle-section" *ngIf="historialDetallado.historialClinico.tratamiento">
+        <h4><i class="fas fa-prescription"></i> Tratamiento</h4>
+        <p class="texto-contenido">{{ historialDetallado.historialClinico.tratamiento }}</p>
+      </div>
+
+      <!-- Medicamentos -->
+      <div class="detalle-section" *ngIf="historialDetallado.historialClinico.medicamentos">
+        <h4><i class="fas fa-pills"></i> Medicamentos</h4>
+        <p class="texto-contenido">{{ historialDetallado.historialClinico.medicamentos }}</p>
+      </div>
+
+      <!-- Recomendaciones -->
+      <div class="detalle-section" *ngIf="historialDetallado.historialClinico.recomendacionesGenerales">
+        <h4><i class="fas fa-lightbulb"></i> Recomendaciones</h4>
+        <p class="texto-contenido">{{ historialDetallado.historialClinico.recomendacionesGenerales }}</p>
+      </div>
+
+      <!-- Observaciones -->
+      <div class="detalle-section" *ngIf="historialDetallado.historialClinico.observaciones">
+        <h4><i class="fas fa-sticky-note"></i> Observaciones</h4>
+        <p class="texto-contenido">{{ historialDetallado.historialClinico.observaciones }}</p>
+      </div>
+
+      <!-- Próxima cita -->
+      <div class="detalle-section" *ngIf="historialDetallado.historialClinico.proximaCita">
+        <h4><i class="fas fa-calendar-plus"></i> Próxima Cita Sugerida</h4>
+        <p class="texto-contenido">{{ formatearFecha(historialDetallado.historialClinico.proximaCita) }}</p>
+      </div>
+    </div>
+    
+    <div class="modal-footer">
+      <button class="btn btn-secondary" (click)="cerrarModalDetalle()">
+        Cerrar
+      </button>
+      <button class="btn btn-primary" (click)="agendarNuevaCita(); cerrarModalDetalle()">
+        <i class="fas fa-calendar-plus"></i>
+        Agendar Nueva Cita
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,1 +1,50 @@
-<p>dashboard-cliente works!</p>
+<app-navbar-cliente></app-navbar-cliente>
+
+<div class="dashboard-container">
+  <div class="dashboard-sidebar">
+    <div class="sidebar-header">
+      <img src="assets/Imagenes/Logo.PNG" alt="Avatar" class="avatar" />
+      <div class="user-details">
+        <h3>{{ clienteInfo.nombre }}</h3>
+        <p>{{ clienteInfo.rol }}</p>
+        <span class="status online">En línea</span>
+      </div>
+    </div>
+    
+    <div class="sidebar-menu">
+      <a class="menu-item" [routerLink]="['/dashboard-cliente']" [routerLinkActive]="'active'" [routerLinkActiveOptions]="{exact: true}">
+        <i class="fas fa-home"></i>
+        <span>Inicio</span>
+      </a>
+      
+      <a class="menu-item" routerLink="/dashboard-cliente/perfil" routerLinkActive="active">
+        <i class="fas fa-user-circle"></i>
+        <span>Mi Perfil</span>
+      </a>
+      
+      <a class="menu-item" [routerLink]="['/dashboard-cliente/mascotas/cliente', numeroDocumento]" routerLinkActive="active">
+        <i class="fas fa-paw"></i>
+        <span>Mis Mascotas</span>
+      </a>
+      
+      <a class="menu-item" routerLink="/dashboard-cliente/citas" routerLinkActive="active">
+        <i class="fas fa-calendar-check"></i>
+        <span>Mis Citas</span>
+      </a>
+      
+      <a class="menu-item" routerLink="/dashboard-cliente/citas/nueva" routerLinkActive="active">
+        <i class="fas fa-calendar-plus"></i>
+        <span>Agendar Cita</span>
+      </a>
+      
+      <a class="menu-item" routerLink="/dashboard-cliente/historial" routerLinkActive="active">
+        <i class="fas fa-clipboard-list"></i>
+        <span>Historia Clínica</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="dashboard-main">
+    <router-outlet></router-outlet>
+  </div>
+</div>

@@ -1,0 +1,107 @@
+<nav class="navbar">
+  <div class="navbar-container">
+    <!-- Logo y marca -->
+    <div class="navbar-brand" (click)="irAInicio()">
+      <img src="assets/Imagenes/Logo.PNG" alt="MIVET" class="logo">
+      <span class="brand-text">MIVET</span>
+      <span class="brand-subtitle">Cliente</span>
+    </div>
+
+    <!-- Navegación principal -->
+    <div class="navbar-nav">
+      <a class="nav-link" (click)="irAInicio()" [class.active]="router.url === '/dashboard-cliente'">
+        <i class="fas fa-home"></i>
+        <span class="nav-text">Inicio</span>
+      </a>
+      
+      <a class="nav-link" (click)="irAMascotas()" [class.active]="router.url.includes('/mascotas')">
+        <i class="fas fa-paw"></i>
+        <span class="nav-text">Mis Mascotas</span>
+      </a>
+      
+      <a class="nav-link" (click)="irACitas()" [class.active]="router.url.includes('/citas')">
+        <i class="fas fa-calendar-check"></i>
+        <span class="nav-text">Mis Citas</span>
+        <span class="badge" *ngIf="proximasCitas > 0">{{ proximasCitas }}</span>
+      </a>
+    </div>
+
+    <!-- Acciones del usuario -->
+    <div class="navbar-actions">
+      <!-- Botón de agendar cita -->
+      <button class="action-btn primary" (click)="agendarCita()" title="Agendar nueva cita">
+        <i class="fas fa-calendar-plus"></i>
+        <span class="btn-text">Agendar</span>
+      </button>
+
+      <!-- Notificaciones -->
+      <button class="action-btn" (click)="verNotificaciones()" title="Notificaciones">
+        <i class="fas fa-bell"></i>
+        <span class="notification-badge" *ngIf="notificaciones > 0">{{ notificaciones }}</span>
+      </button>
+
+      <!-- Menú de usuario -->
+      <div class="user-menu">
+        <button class="user-button" (click)="toggleUserMenu()">
+          <div class="user-avatar">
+            {{ getIniciales() }}
+          </div>
+          <div class="user-info">
+            <span class="user-name">{{ getNombreCorto() }}</span>
+            <span class="user-role">Cliente</span>
+          </div>
+          <i class="fas fa-chevron-down"></i>
+        </button>
+
+        <!-- Dropdown del usuario -->
+        <div class="user-dropdown" [class.show]="showUserMenu">
+          <div class="dropdown-header">
+            <div class="user-avatar large">
+              {{ getIniciales() }}
+            </div>
+            <div class="user-details">
+              <h4>{{ clienteInfo.nombre }}</h4>
+              <p>{{ clienteInfo.documento }}</p>
+              <small>{{ clienteInfo.email }}</small>
+            </div>
+          </div>
+          
+          <div class="dropdown-body">
+            <a class="dropdown-item" (click)="irAPerfil(); closeUserMenu()">
+              <i class="fas fa-user-circle"></i>
+              <span>Mi Perfil</span>
+            </a>
+            
+            <a class="dropdown-item" (click)="irACitas(); closeUserMenu()">
+              <i class="fas fa-calendar-check"></i>
+              <span>Mis Citas</span>
+              <span class="count" *ngIf="proximasCitas > 0">{{ proximasCitas }}</span>
+            </a>
+            
+            <a class="dropdown-item" (click)="irAMascotas(); closeUserMenu()">
+              <i class="fas fa-paw"></i>
+              <span>Mis Mascotas</span>
+            </a>
+            
+            <div class="dropdown-divider"></div>
+            
+            <a class="dropdown-item" routerLink="/dashboard-cliente/historial" (click)="closeUserMenu()">
+              <i class="fas fa-clipboard-list"></i>
+              <span>Historia Clínica</span>
+            </a>
+            
+            <div class="dropdown-divider"></div>
+            
+            <a class="dropdown-item logout" (click)="logout()">
+              <i class="fas fa-sign-out-alt"></i>
+              <span>Cerrar Sesión</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Overlay para cerrar dropdown -->
+  <div class="dropdown-overlay" *ngIf="showUserMenu" (click)="closeUserMenu()"></div>
+</nav>

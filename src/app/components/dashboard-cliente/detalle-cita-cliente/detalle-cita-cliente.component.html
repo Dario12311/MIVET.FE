@@ -1,0 +1,453 @@
+<div class="detalle-cita-container">
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-content">
+      <button class="back-btn" (click)="volver()">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <div class="header-text">
+        <h1><i class="fas fa-calendar-check"></i> Detalles de mi Cita</h1>
+        <p>Información completa de tu cita veterinaria</p>
+      </div>
+      <div class="header-actions" *ngIf="cita">
+        <button 
+          class="btn btn-outline-secondary btn-sm"
+          (click)="imprimirCita()"
+          title="Imprimir cita">
+          <i class="fas fa-print"></i> Imprimir
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Indicador de carga -->
+  <div *ngIf="cargando" class="loading-container">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p>Cargando detalles de tu cita...</p>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="error && !cargando" class="error-container">
+    <i class="fas fa-exclamation-triangle fa-3x"></i>
+    <h3>No se pudo cargar la cita</h3>
+    <p class="error-message">{{ error }}</p>
+    <div class="error-actions">
+      <button class="btn btn-primary" (click)="cargarCita()">
+        <i class="fas fa-refresh"></i> Intentar de nuevo
+      </button>
+      <button class="btn btn-secondary" (click)="volver()">
+        <i class="fas fa-arrow-left"></i> Volver a mis citas
+      </button>
+    </div>
+  </div>
+
+  <!-- Contenido de la cita -->
+  <div *ngIf="cita && !cargando" class="cita-details">
+    
+    <!-- Estado y Acciones Rápidas -->
+    <div class="status-section">
+      <div class="status-card">
+        <div class="status-info">
+          <div class="status-badge" [style.background]="getColorEstado()">
+            {{ getNombreEstado() }}
+          </div>
+          <div class="cita-id">Cita #{{ cita.id }}</div>
+          <div class="tiempo-restante" *ngIf="obtenerTiempoRestante()">
+            <i class="fas fa-clock"></i>
+            <span class="tiempo-texto">{{ obtenerTiempoRestante() }}</span>
+          </div>
+        </div>
+        
+        <div class="quick-actions" *ngIf="mostrarAcciones()">
+          <button 
+            class="btn btn-warning btn-sm"
+            (click)="reprogramarCita()"
+            [disabled]="!puedeReprogramar()"
+            title="Reprogramar cita">
+            <i class="fas fa-calendar-alt"></i> Reprogramar
+          </button>
+          
+          <button 
+            class="btn btn-danger btn-sm"
+            (click)="cancelarCita()"
+            [disabled]="!puedeCancelar()"
+            title="Cancelar cita">
+            <i class="fas fa-times"></i> Cancelar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Información Principal -->
+    <div class="details-grid">
+      
+      <!-- Información de la Cita -->
+      <div class="detail-card">
+        <div class="card-header">
+          <h3><i class="fas fa-calendar-alt"></i> Información de la Cita</h3>
+        </div>
+        <div class="card-body">
+          <div class="detail-item">
+            <span class="label">Fecha:</span>
+            <span class="value">{{ formatearFecha(cita.fechaCita) }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Hora de inicio:</span>
+            <span class="value">{{ formatearHora(cita.horaInicio) }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Hora de fin:</span>
+            <span class="value">{{ formatearHora(cita.horaFin) }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Duración:</span>
+            <span class="value">{{ cita.duracionMinutos }} minutos</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Tipo de cita:</span>
+            <span class="value">{{ getNombreTipoCita() }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Estado:</span>
+            <span class="value status-text" [style.color]="getColorEstado()">
+              {{ getNombreEstado() }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Información de la Mascota -->
+      <div class="detail-card">
+        <div class="card-header">
+          <h3><i class="fas fa-paw"></i> Mi Mascota</h3>
+        </div>
+        <div class="card-body">
+          <div class="detail-item">
+            <span class="label">Nombre:</span>
+            <span class="value mascota-nombre">{{ cita.nombreMascota }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">ID:</span>
+            <span class="value">#{{ cita.mascotaId }}</span>
+          </div>
+          <div class="action-links">
+            <button class="btn btn-link btn-sm" (click)="verMascota()">
+              <i class="fas fa-eye"></i> Ver perfil de mi mascota
+            </button>
+            <button class="btn btn-link btn-sm" (click)="verHistorialMascota()">
+              <i class="fas fa-history"></i> Ver historial médico
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Información del Veterinario -->
+      <div class="detail-card">
+        <div class="card-header">
+          <h3><i class="fas fa-user-md"></i> Veterinario Asignado</h3>
+        </div>
+        <div class="card-body">
+          <div class="detail-item">
+            <span class="label">Nombre:</span>
+            <span class="value veterinario-nombre">Dr. {{ cita.nombreVeterinario }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Documento:</span>
+            <span class="value">{{ cita.medicoVeterinarioNumeroDocumento }}</span>
+          </div>
+          <div class="veterinario-note">
+            <i class="fas fa-info-circle"></i>
+            <p>Tu veterinario asignado te atenderá en la fecha y hora programada</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cliente (Mi información) -->
+      <div class="detail-card">
+        <div class="card-header">
+          <h3><i class="fas fa-user"></i> Mi Información</h3>
+        </div>
+        <div class="card-body">
+          <div class="detail-item">
+            <span class="label">Cliente:</span>
+            <span class="value cliente-nombre">{{ clienteActual?.nombre }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="label">Documento:</span>
+            <span class="value">{{ numeroDocumento }}</span>
+          </div>
+          <div class="action-links">
+            <button class="btn btn-link btn-sm" (click)="verTodasMisCitas()">
+              <i class="fas fa-calendar"></i> Ver todas mis citas
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Motivo y Observaciones -->
+      <div class="detail-card full-width">
+        <div class="card-header">
+          <h3><i class="fas fa-clipboard"></i> Detalles de la Consulta</h3>
+        </div>
+        <div class="card-body">
+          <div class="detail-item">
+            <span class="label">Motivo de la consulta:</span>
+            <div class="value-text-area">
+              <div class="texto-completo" [title]="cita.motivoConsulta">
+                {{ cita.motivoConsulta }}
+              </div>
+            </div>
+          </div>
+          <div class="detail-item" *ngIf="cita.observaciones">
+            <span class="label">Observaciones adicionales:</span>
+            <div class="value-text-area">
+              <div class="texto-completo" [title]="cita.observaciones">
+                {{ cita.observaciones }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Timeline de Estados (si aplica) -->
+      <div class="detail-card full-width" *ngIf="mostrarTimeline()">
+        <div class="card-header">
+          <h3><i class="fas fa-history"></i> Historial de la Cita</h3>
+        </div>
+        <div class="card-body">
+          <div class="timeline">
+            <div class="timeline-item" *ngFor="let item of timelineEstados">
+              <div class="timeline-marker" [class]="item.clase"></div>
+              <div class="timeline-content">
+                <div class="timeline-title">{{ item.estado }}</div>
+                <div class="timeline-date">{{ item.fecha }}</div>
+                <div class="timeline-description" *ngIf="item.descripcion">
+                  {{ item.descripcion }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Información Importante -->
+      <div class="detail-card full-width important-info">
+        <div class="card-header">
+          <h3><i class="fas fa-info-circle"></i> Información Importante</h3>
+        </div>
+        <div class="card-body">
+          <div class="info-grid">
+            <div class="info-item">
+              <i class="fas fa-clock"></i>
+              <div>
+                <strong>Puntualidad:</strong>
+                <p>Por favor llega 15 minutos antes de tu cita</p>
+              </div>
+            </div>
+            
+            <div class="info-item">
+              <i class="fas fa-clipboard-list"></i>
+              <div>
+                <strong>Documentos:</strong>
+                <p>Trae la cartilla de vacunación de tu mascota</p>
+              </div>
+            </div>
+            
+            <div class="info-item" *ngIf="puedeCancelar()">
+              <i class="fas fa-exclamation-triangle"></i>
+              <div>
+                <strong>Cancelaciones:</strong>
+                <p>Puedes cancelar hasta 2 horas antes de la cita</p>
+              </div>
+            </div>
+            
+            <div class="info-item" *ngIf="puedeReprogramar()">
+              <i class="fas fa-calendar-alt"></i>
+              <div>
+                <strong>Reprogramación:</strong>
+                <p>Puedes reprogramar hasta 4 horas antes de la cita</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Acciones Adicionales -->
+    <div class="additional-actions">
+      <button class="btn btn-outline-primary" (click)="agendarNuevaCita()">
+        <i class="fas fa-plus"></i> Agendar otra cita
+      </button>
+      <button class="btn btn-outline-secondary" (click)="verTodasMisCitas()">
+        <i class="fas fa-calendar"></i> Ver todas mis citas
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para cancelar cita -->
+<div class="modal-backdrop" *ngIf="mostrarModalCancelar" (click)="cerrarModalCancelar()">
+  <div class="modal-content modal-small" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Cancelar mi Cita</h3>
+      <button type="button" class="btn-close" (click)="cerrarModalCancelar()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    
+    <div class="modal-body">
+      <div class="cancelar-info">
+        <p><strong>¿Estás seguro de cancelar esta cita?</strong></p>
+        <div class="cita-details-modal">
+          <div class="cita-detail-row">
+            <i class="fas fa-paw"></i> 
+            <span class="detail-label">Mascota:</span> 
+            <span class="detail-value">{{ cita?.nombreMascota }}</span>
+          </div>
+          <div class="cita-detail-row">
+            <i class="fas fa-calendar"></i> 
+            <span class="detail-label">Fecha:</span> 
+            <span class="detail-value">{{ formatearFecha(cita?.fechaCita) }}</span>
+          </div>
+          <div class="cita-detail-row">
+            <i class="fas fa-clock"></i> 
+            <span class="detail-label">Hora:</span> 
+            <span class="detail-value">{{ formatearHora(cita?.horaInicio) }}</span>
+          </div>
+          <div class="cita-detail-row">
+            <i class="fas fa-user-md"></i> 
+            <span class="detail-label">Veterinario:</span> 
+            <span class="detail-value">Dr. {{ cita?.nombreVeterinario }}</span>
+          </div>
+          <div class="cita-detail-row motivo-row" *ngIf="cita?.motivoConsulta">
+            <i class="fas fa-clipboard"></i> 
+            <span class="detail-label">Motivo:</span>
+            <div class="detail-motivo">{{ cita?.motivoConsulta }}</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="motivoCancelacion">Motivo de la cancelación *</label>
+        <textarea 
+          id="motivoCancelacion" 
+          class="form-control" 
+          [(ngModel)]="motivoCancelacion"
+          rows="4"
+          maxlength="500"
+          placeholder="Por favor, comparte el motivo de la cancelación..."></textarea>
+        <div class="form-feedback">
+          <small class="form-text">Esta información nos ayuda a mejorar nuestro servicio</small>
+          <small class="char-counter" [class.text-warning]="motivoCancelacion && motivoCancelacion.length > 450">
+            {{ motivoCancelacion ? motivoCancelacion.length : 0 }}/500 caracteres
+          </small>
+        </div>
+      </div>
+    </div>
+    
+    <div class="modal-footer">
+      <button class="btn btn-secondary" (click)="cerrarModalCancelar()">
+        <i class="fas fa-arrow-left"></i> Volver
+      </button>
+      <button 
+        class="btn btn-danger" 
+        (click)="confirmarCancelacion()"
+        [disabled]="!motivoCancelacion || !motivoCancelacion.trim()">
+        <i class="fas fa-times"></i>
+        Cancelar Cita
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para reprogramar cita -->
+<div class="modal-backdrop" *ngIf="mostrarModalReprogramar" (click)="cerrarModalReprogramar()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Reprogramar mi Cita</h3>
+      <button type="button" class="btn-close" (click)="cerrarModalReprogramar()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    
+    <div class="modal-body">
+      <div class="reprogramar-info">
+        <p><strong>Cita actual:</strong></p>
+        <div class="cita-details-modal">
+          <div class="cita-detail-row">
+            <i class="fas fa-paw"></i> 
+            <span class="detail-label">Mascota:</span> 
+            <span class="detail-value">{{ cita?.nombreMascota }}</span>
+          </div>
+          <div class="cita-detail-row">
+            <i class="fas fa-calendar"></i> 
+            <span class="detail-label">Fecha actual:</span> 
+            <span class="detail-value">{{ formatearFecha(cita?.fechaCita) }}</span>
+          </div>
+          <div class="cita-detail-row">
+            <i class="fas fa-clock"></i> 
+            <span class="detail-label">Hora actual:</span> 
+            <span class="detail-value">{{ formatearHora(cita?.horaInicio) }}</span>
+          </div>
+          <div class="cita-detail-row">
+            <i class="fas fa-user-md"></i> 
+            <span class="detail-label">Veterinario:</span> 
+            <span class="detail-value">Dr. {{ cita?.nombreVeterinario }}</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="nuevaFecha">Nueva Fecha *</label>
+          <input 
+            type="date" 
+            id="nuevaFecha" 
+            class="form-control" 
+            [(ngModel)]="nuevaFecha"
+            [min]="fechaMinima"
+            [max]="fechaMaxima"
+            (change)="onNuevaFechaCambio()">
+          <small class="form-text">Selecciona una nueva fecha para tu cita</small>
+        </div>
+        
+        <div class="form-group">
+          <label for="nuevaHora">Nueva Hora *</label>
+          <select 
+            id="nuevaHora" 
+            class="form-control" 
+            [(ngModel)]="nuevaHora"
+            [disabled]="!nuevaFecha">
+            <option value="">Seleccionar hora...</option>
+            <option *ngFor="let hora of horasDisponiblesReprogramacion" [value]="hora.hora">
+              {{ formatearHora(hora.hora) }}
+            </option>
+          </select>
+          <small class="form-text" *ngIf="nuevaFecha && horasDisponiblesReprogramacion.length === 0 && !cargandoHorasReprogramacion">
+            No hay horarios disponibles para esta fecha
+          </small>
+        </div>
+      </div>
+      
+      <div class="loading-reprogramar" *ngIf="cargandoHorasReprogramacion">
+        <div class="spinner-border spinner-sm"></div>
+        <span>Buscando horarios disponibles...</span>
+      </div>
+    </div>
+    
+    <div class="modal-footer">
+      <button class="btn btn-secondary" (click)="cerrarModalReprogramar()">
+        <i class="fas fa-times"></i> Cancelar
+      </button>
+      <button 
+        class="btn btn-warning" 
+        (click)="confirmarReprogramacion()"
+        [disabled]="!nuevaFecha || !nuevaHora">
+        <i class="fas fa-calendar-alt"></i>
+        Reprogramar Cita
+      </button>
+    </div>
+  </div>
+</div>

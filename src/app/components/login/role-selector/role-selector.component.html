@@ -1,17 +1,18 @@
 <div class="role-selector-container">
-    <div class="role-selector-card">
-      <h2>Bienvenido, {{ nombreUsuario }}</h2>
-      <p>Selecciona el rol con el que deseas ingresar:</p>
-      
-      <div class="roles-list">
-        <div *ngFor="let role of roles" class="role-option" (click)="selectRole(role)">
-          <div class="role-icon">
-            <i *ngIf="role === 'ADMINISTRADOR'" class="fas fa-user-cog"></i>
-            <i *ngIf="role === 'RECEPCIONISTA'" class="fas fa-user-tie"></i>
-            <i *ngIf="role !== 'ADMINISTRADOR' && role !== 'RECEPCIONISTA'" class="fas fa-user"></i>
-          </div>
-          <div class="role-name">{{ role }}</div>
+  <div class="role-selector-card">
+    <h2>Bienvenido, {{ nombreUsuario }}</h2>
+    <p>Selecciona el rol con el que deseas ingresar:</p>
+    
+    <div class="roles-list">
+      <div *ngFor="let role of roles" class="role-option" (click)="selectRole(role)">
+        <div class="role-icon">
+          <i *ngIf="role === 'ADMINISTRADOR'" class="fas fa-user-cog"></i>
+          <i *ngIf="role === 'RECEPCIONISTA'" class="fas fa-user-tie"></i>
+          <i *ngIf="role === 'VETERINARIO'" class="fas fa-user-md"></i>
+          <i *ngIf="role === 'CLIENTE'" class="fas fa-user"></i>
         </div>
+        <div class="role-name">{{ role }}</div>
       </div>
     </div>
   </div>
+</div>

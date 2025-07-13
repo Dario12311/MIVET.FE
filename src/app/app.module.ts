@@ -31,6 +31,15 @@ import { ListaHorariosComponent } from './components/dashboard/lista-horarios/li
 import { AgendarCitaComponent } from './components/dashboard/agendar-cita/agendar-cita.component';
 import { ListaCitasComponent } from './components/dashboard/lista-citas/lista-citas.component';
 import { DetalleCitaComponent } from './components/dashboard/detalle-cita/detalle-cita.component';
+import { PerfilClienteComponent } from './components/dashboard-cliente/perfil-cliente/perfil-cliente.component';
+import { InicioDashboardClienteComponent } from './components/dashboard-cliente/inicio-dashboard-cliente/inicio-dashboard-cliente.component';
+import { NavbarClienteComponent } from './navbar/navbar-cliente/navbar-cliente.component';
+import { MascotasClienteComponent } from './components/dashboard-cliente/mascotas-cliente/mascotas-cliente.component';
+import { HistorialClinicoClienteComponent } from './components/dashboard-cliente/historial-clinico-cliente/historial-clinico-cliente.component';
+import { ClienteService } from './services/cliente.service';
+import { AgendarCitaClienteComponent } from './components/dashboard-cliente/agendar-cita-cliente/agendar-cita-cliente.component';
+import { ListaCitasClienteComponent } from './components/dashboard-cliente/lista-citas-cliente/lista-citas-cliente.component';
+import { DetalleCitaClienteComponent } from './components/dashboard-cliente/detalle-cita-cliente/detalle-cita-cliente.component';
 
 @NgModule({
   declarations: [
@@ -59,6 +68,14 @@ import { DetalleCitaComponent } from './components/dashboard/detalle-cita/detall
     AgendarCitaComponent,
     ListaCitasComponent,
     DetalleCitaComponent,
+    PerfilClienteComponent,
+    InicioDashboardClienteComponent,
+    NavbarClienteComponent,
+    MascotasClienteComponent,
+    HistorialClinicoClienteComponent,
+    AgendarCitaClienteComponent,
+    ListaCitasClienteComponent,
+    DetalleCitaClienteComponent,
   ],
   imports: [
     BrowserModule,
@@ -69,7 +86,7 @@ import { DetalleCitaComponent } from './components/dashboard/detalle-cita/detall
     ReactiveFormsModule,
     HttpClientModule,
 ],
-  providers: [],
+  providers: [ClienteService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -11,6 +11,24 @@ interface DecodedToken {
   // Claims personalizados según tu backend
   idUsuario: string;
   nombreUsuario: string;
+  identificacion: string;
+  
+  // Información personal del usuario
+  primerNombre?: string;
+  segundoNombre?: string;
+  primerApellido?: string;
+  segundoApellido?: string;
+  
+  // Información de contacto
+  correoElectronico?: string;
+  telefono?: string;
+  celular?: string;
+  direccion?: string;
+  ciudad?: string;
+  departamento?: string;
+  pais?: string;
+  
+  // Roles
   roles?: string | string[];
 }
 
@@ -149,5 +167,114 @@ export class TokenService {
   getUserName(): string | null {
     const decoded = this.getDecodedToken();
     return decoded ? decoded.nombreUsuario : null;
+  }
+
+  /**
+   * Obtiene los datos del usuario desde el token
+   * @returns Datos del usuario o null si no hay token
+   */
+  getUserData(): any | null {
+    const decoded = this.getDecodedToken();
+    if (!decoded) {
+      return null;
+    }
+
+    // Retorna un objeto con los datos del usuario disponibles en el token
+    return {
+      idUsuario: decoded.idUsuario,
+      nombreUsuario: decoded.nombreUsuario,
+      numeroDocumento: decoded.identificacion || decoded.sub || decoded.idUsuario,
+      identificacion: decoded.identificacion || decoded.sub || decoded.idUsuario,
+      
+      // Información personal
+      primerNombre: decoded.primerNombre || '',
+      segundoNombre: decoded.segundoNombre || '',
+      primerApellido: decoded.primerApellido || '',
+      segundoApellido: decoded.segundoApellido || '',
+      nombre: this.construirNombreCompleto(decoded),
+      
+      // Información de contacto
+      correoElectronico: decoded.correoElectronico || '',
+      email: decoded.correoElectronico || '',
+      telefono: decoded.telefono || '',
+      celular: decoded.celular || '',
+      direccion: decoded.direccion || '',
+      ciudad: decoded.ciudad || '',
+      departamento: decoded.departamento || '',
+      pais: decoded.pais || '',
+      
+      // Roles
+      roles: this.getUserRole(),
+    };
+  }
+
+  /**
+   * Construye el nombre completo del usuario
+   * @param decoded Token decodificado
+   * @returns Nombre completo
+   */
+  private construirNombreCompleto(decoded: DecodedToken): string {
+    const nombres = [
+      decoded.primerNombre,
+      decoded.segundoNombre,
+      decoded.primerApellido,
+      decoded.segundoApellido
+    ].filter(nombre => nombre && nombre.trim() !== '');
+    
+    return nombres.length > 0 ? nombres.join(' ') : decoded.nombreUsuario || 'Usuario';
+  }
+
+  /**
+   * Obtiene la identificación/documento del usuario
+   * @returns Número de documento o null si no hay token
+   */
+  getUserDocument(): string | null {
+    const decoded = this.getDecodedToken();
+    return decoded ? (decoded.identificacion || decoded.sub || decoded.idUsuario) : null;
+  }
+
+  /**
+   * Obtiene el email del usuario
+   * @returns Email del usuario o null si no hay token
+   */
+  getUserEmail(): string | null {
+    const decoded = this.getDecodedToken();
+    return decoded ? (decoded.correoElectronico || '') : null;
+  }
+
+  /**
+   * Obtiene el teléfono del usuario
+   * @returns Teléfono del usuario o null si no hay token
+   */
+  getUserPhone(): string | null {
+    const decoded = this.getDecodedToken();
+    return decoded ? (decoded.telefono || '') : null;
+  }
+
+  /**
+   * Obtiene el celular del usuario
+   * @returns Celular del usuario o null si no hay token
+   */
+  getUserCellPhone(): string | null {
+    const decoded = this.getDecodedToken();
+    return decoded ? (decoded.celular || '') : null;
+  }
+
+  /**
+   * Obtiene la dirección del usuario
+   * @returns Dirección del usuario o null si no hay token
+   */
+  getUserAddress(): string | null {
+    const decoded = this.getDecodedToken();
+    return decoded ? (decoded.direccion || '') : null;
+  }
+
+  /**
+   * Obtiene la ciudad del usuario
+   * @returns Ciudad del usuario o null si no hay token
+   */
+  getUserCity(): string | null {
+    const decoded = this.getDecodedToken();
+    return decoded ? (decoded.ciudad || '') : null;
   }
 }

@@ -1,0 +1,251 @@
+<div class="container-fluid">
+  <!-- Header Principal -->
+  <div class="main-header">
+    <div>
+      <h1>¡Bienvenido, {{ clienteInfo.nombre }}!</h1>
+      <p>Aquí tienes un resumen completo de tu información veterinaria</p>
+    </div>
+    
+    <div class="header-actions">
+      <button class="action-btn" (click)="agendarNuevaCita()" title="Agendar nueva cita">
+        <i class="fas fa-calendar-plus"></i>
+        <span class="notification-badge" *ngIf="proximasCitas === 0">!</span>
+      </button>
+      <button class="action-btn" (click)="verTodasLasCitas()" title="Ver mis citas">
+        <i class="fas fa-calendar-check"></i>
+        <span class="notification-badge" *ngIf="proximasCitas > 0">{{ proximasCitas }}</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Indicador de carga -->
+  <div *ngIf="cargando" class="text-center" style="padding: 60px;">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+    <p style="margin-top: 20px; color: #666; font-size: 1.1em;">Cargando tu información...</p>
+  </div>
+
+  <!-- Contenido Principal -->
+  <div *ngIf="!cargando">
+    
+    <!-- Tarjetas de estadísticas -->
+    <div class="stats-container">
+      <div class="stat-card primary">
+        <div class="stat-icon">
+          <i class="fas fa-paw"></i>
+        </div>
+        <div class="stat-info">
+          <h3>{{ totalMascotas }}</h3>
+          <p>Mis Mascotas</p>
+          <div class="stat-trend up" *ngIf="totalMascotas > 0">
+            <i class="fas fa-arrow-up"></i>
+            Registradas
+          </div>
+          <div class="stat-trend" *ngIf="totalMascotas === 0">
+            <i class="fas fa-info-circle"></i>
+            Sin registros
+          </div>
+        </div>
+      </div>
+
+      <div class="stat-card success">
+        <div class="stat-icon">
+          <i class="fas fa-calendar-check"></i>
+        </div>
+        <div class="stat-info">
+          <h3>{{ proximasCitas }}</h3>
+          <p>Próximas Citas</p>
+          <div class="stat-trend up" *ngIf="proximasCitas > 0">
+            <i class="fas fa-clock"></i>
+            Programadas
+          </div>
+          <div class="stat-trend" *ngIf="proximasCitas === 0">
+            <i class="fas fa-calendar-plus"></i>
+            Agenda ahora
+          </div>
+        </div>
+      </div>
+
+      <div class="stat-card warning">
+        <div class="stat-icon">
+          <i class="fas fa-clipboard-check"></i>
+        </div>
+        <div class="stat-info">
+          <h3>{{ citasCompletadas }}</h3>
+          <p>Consultas Realizadas</p>
+          <div class="stat-trend up" *ngIf="citasCompletadas > 0">
+            <i class="fas fa-check"></i>
+            Completadas
+          </div>
+          <div class="stat-trend" *ngIf="citasCompletadas === 0">
+            <i class="fas fa-history"></i>
+            Historial vacío
+          </div>
+        </div>
+      </div>
+
+      <div class="stat-card info" *ngIf="ultimaVisita">
+        <div class="stat-icon">
+          <i class="fas fa-history"></i>
+        </div>
+        <div class="stat-info">
+          <h3 class="fecha-pequena">{{ ultimaVisita }}</h3>
+          <p>Última Visita</p>
+          <div class="stat-trend">
+            <i class="fas fa-calendar"></i>
+            Registrada
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grid de contenido principal -->
+    <div class="dashboard-grid">
+      
+      <!-- Próximas Citas -->
+      <div class="grid-item appointments">
+        <div class="item-header">
+          <h2>
+            <i class="fas fa-calendar-alt" style="margin-right: 10px; color: #667eea;"></i>
+            Próximas Citas
+          </h2>
+          <a class="view-all" (click)="verTodasLasCitas()">
+            <i class="fas fa-arrow-right" style="margin-left: 5px;"></i>
+            Ver todas
+          </a>
+        </div>
+        
+        <div *ngIf="citasProximas.length === 0" class="text-center" style="padding: 40px;">
+          <i class="fas fa-calendar-times" style="font-size: 3em; margin-bottom: 20px; opacity: 0.3;"></i>
+          <p style="font-size: 1.1em; margin-bottom: 20px;">No tienes citas programadas</p>
+          <p style="color: #999; margin-bottom: 25px;">¡Es un buen momento para agendar una consulta para tus mascotas!</p>
+          <button class="btn btn-primary" (click)="agendarNuevaCita()">
+            <i class="fas fa-plus"></i> Agendar Primera Cita
+          </button>
+        </div>
+
+        <div class="appointment-list" *ngIf="citasProximas.length > 0">
+          <div *ngFor="let cita of citasProximas" class="appointment-item" (click)="verCita(cita.id)">
+            <div class="appointment-time">
+              <div class="time">{{ formatearHora(cita.horaInicio) }}</div>
+              <div class="date">{{ formatearFecha(cita.fechaCita) }}</div>
+            </div>
+            <div class="appointment-details">
+              <h4 class="appointment-title">{{ cita.nombreMascota }}</h4>
+              <div class="appointment-motivo">
+                <span class="motivo-label">Motivo:</span>
+                <p class="motivo-texto" [title]="cita.motivoConsulta">{{ cita.motivoConsulta }}</p>
+              </div>
+              <div class="appointment-vet">
+                <i class="fas fa-user-md" style="margin-right: 5px;"></i>
+                Dr. {{ cita.nombreVeterinario }}
+              </div>
+            </div>
+            <div class="appointment-status">
+              <span class="badge" [style.background-color]="getColorEstadoCita(cita.estadoCita)">
+                {{ getNombreEstadoCita(cita.estadoCita) }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mis Mascotas -->
+      <div class="grid-item pets">
+        <div class="item-header">
+          <h2>
+            <i class="fas fa-paw" style="margin-right: 10px; color: #667eea;"></i>
+            Mis Mascotas
+          </h2>
+          <a class="view-all" (click)="verTodasLasMascotas()">
+            <i class="fas fa-arrow-right" style="margin-left: 5px;"></i>
+            Ver todas
+          </a>
+        </div>
+        
+        <div *ngIf="mascotas.length === 0" class="text-center" style="padding: 30px;">
+          <i class="fas fa-paw" style="font-size: 2.5em; margin-bottom: 15px; opacity: 0.3;"></i>
+          <p style="margin-bottom: 15px;">No tienes mascotas registradas</p>
+          <p style="color: #999; font-size: 0.9em; margin-bottom: 20px;">Registra a tu mascota para comenzar</p>
+          <button class="btn btn-primary btn-sm" (click)="verTodasLasMascotas()">
+            <i class="fas fa-plus"></i> Registrar Mi Primera Mascota
+          </button>
+        </div>
+
+        <div class="pet-list" *ngIf="mascotas.length > 0">
+          <div *ngFor="let mascota of mascotas" class="pet-item" (click)="verTodasLasMascotas()">
+            <div class="pet-icon">
+              <i class="fas fa-paw"></i>
+            </div>
+            <div class="pet-details">
+              <h4 class="pet-name">{{ mascota.nombre }}</h4>
+              <p class="pet-info">{{ mascota.especie }} • {{ mascota.raza }}</p>
+              <small class="pet-age">
+                <i class="fas fa-birthday-cake" style="margin-right: 3px;"></i>
+                {{ mascota.edad }} años
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actividad Reciente -->
+      <div class="grid-item recent-activity">
+        <div class="item-header">
+          <h2>
+            <i class="fas fa-clock" style="margin-right: 10px; color: #667eea;"></i>
+            Actividad Reciente
+          </h2>
+        </div>
+        
+        <div *ngIf="actividadReciente.length === 0" class="text-center" style="padding: 30px;">
+          <i class="fas fa-history" style="font-size: 2em; margin-bottom: 15px; opacity: 0.3;"></i>
+          <p style="margin-bottom: 10px;">No hay actividad reciente</p>
+          <small style="color: #999;">Tu actividad aparecerá aquí</small>
+        </div>
+
+        <div class="activity-list" *ngIf="actividadReciente.length > 0">
+          <div *ngFor="let actividad of actividadReciente" class="activity-item">
+            <div class="activity-icon">
+              <i [class]="actividad.icono"></i>
+            </div>
+            <div class="activity-details">
+              <p class="activity-text">{{ actividad.descripcion }}</p>
+              <div class="activity-time">{{ actividad.tiempo }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Acciones rápidas -->
+    <div class="quick-actions">
+      <div>
+        <h3>
+          <i class="fas fa-bolt" style="margin-right: 10px; color: #667eea;"></i>
+          Acciones Rápidas
+        </h3>
+        <div>
+          <button class="btn btn-primary" (click)="agendarNuevaCita()">
+            <i class="fas fa-calendar-plus"></i>
+            Agendar Cita
+          </button>
+          <button class="btn btn-outline-primary" (click)="verTodasLasMascotas()">
+            <i class="fas fa-paw"></i>
+            Registrar Mascota
+          </button>
+          <button class="btn btn-outline-primary" [routerLink]="['/dashboard-cliente/historial']">
+            <i class="fas fa-clipboard-list"></i>
+            Ver Historia Clínica
+          </button>
+          <button class="btn btn-outline-primary" [routerLink]="['/dashboard-cliente/perfil']">
+            <i class="fas fa-user-edit"></i>
+            Editar Perfil
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
